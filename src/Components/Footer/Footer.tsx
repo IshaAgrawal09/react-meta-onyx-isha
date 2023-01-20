@@ -72,7 +72,7 @@ function Footer(_props: Props) {
                             }}
                             thickness="thin"
                             type="TextButton">
-                            Get Support
+                            Get our Support
                         </Button>
                     )}
                 </FlexLayout>
