@@ -13,8 +13,8 @@ export const APP_TARGET_NAME = 'meta';
 export const cardTitleAuth = {
     login: 'Login',
     register: 'Create Account',
-    forgot: 'Generate Password Reset link',
-    reset: 'Reset password',
+    forgot: 'Generate Password Reset Link',
+    reset: 'Reset Password',
     default: '',
 };
 export const currency = 'USD';

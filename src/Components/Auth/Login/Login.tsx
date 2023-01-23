@@ -68,7 +68,7 @@ function Login(_props: PropsI): JSX.Element {
         return () => {};
     }, []);
 
-    /**
+    /*
      * Function to call LOGIN API
      */
     function SubmitData(): void {
@@ -113,7 +113,8 @@ function Login(_props: PropsI): JSX.Element {
                         `${tokenDecoded['user_id']}_username`,
                         extractUSername(username)
                     );
-                    sessionStorage.setItem('webhook_call', 'true');
+                    _props.di.globalState.set('webhook_call', 'true');
+                    // sessionStorage.setItem('webhook_call', 'true');
                     _props.di.globalState.removeLocalStorage(
                         `${tokenDecoded['user_id']}_showInstagramWarning`
                     );
@@ -207,6 +208,7 @@ function Login(_props: PropsI): JSX.Element {
                     placeHolder={'ex: abc@gmail.com'}
                     value={username}
                     onblur={() => {
+                        console.log(username.trim(), 'trim');
                         if (username.trim() != '') {
                             if (!username.match(emailFormat)) {
                                 setErrorValidation({

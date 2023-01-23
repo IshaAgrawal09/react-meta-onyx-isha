@@ -9,8 +9,10 @@
 }
 
 .init-LoginPage {
-    max-width: 52%;
-    margin: 0rem auto;
+    width: 100% !important; 
+    max-width: 1006px !important;
+    margin: 0 auto;
+    padding: 100px 6rem 0;
 }
 
 .init-LoginPage__Wrapper {
@@ -41,29 +43,20 @@
 }
 
 .inte-auth-custom .inte__l-Layout {
-    max-width: 35%;
+    max-width: 40%;
 }
 
 .inte-auth-custom .inte__r-Layout {
-    max-width: 55%;
+    max-width: 50%;
 }
+
 .auth_page_title h1 {
     color: #413BBC !important;
 }
-@media only screen and (max-width: 768px) {
 
+@media only screen and (max-width: 768px) {
     .inte-auth-custom .inte__l-Layout,
     .inte-auth-custom .inte__r-Layout {
         max-width: 100%;
-    }
-}
-@media only screen and (max-width: 1200px){
-    .init-LoginPage{
-        max-width: 100%;
-    }
-}
-@media only screen and (min-width: 1201px) and (max-width: 1500px){
-    .init-LoginPage{
-        max-width: 65%;
     }
 }

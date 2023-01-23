@@ -2,12 +2,13 @@
 import React from 'react';
 import { DIProps, DI } from '../../Core';
 import { Navigate, Route, Routes, useParams } from 'react-router-dom';
-import { Alert, FlexLayout, LRLayout, TextStyles } from '@cedcommerce/ounce-ui';
+import { FlexLayout, LRLayout, TextStyles } from '@cedcommerce/ounce-ui';
 import Footer from '../Footer/Footer';
 import './auth.css';
 import Login from './Login/Login';
 import Reset from './Reset/Reset';
 import Forgot from './Forgot/Forgot';
+import Register from './Register/Register';
 import { cardTitleAuth } from '../../Constant';
 import ForgotSuccess from './Forgot/ForgotSuccess';
 
@@ -26,7 +27,8 @@ function Auth(_props: DIProps): JSX.Element {
             ? cardTitleAuth.reset
             : cardTitleAuth.default;
     };
-    const registerPath = match['*']?.includes('/register');
+    // const registerPath = match['*']?.includes('/register');
+    // console.log(useParams(), 'match');
 
     return (
         <>
@@ -44,7 +46,7 @@ function Auth(_props: DIProps): JSX.Element {
                                         textcolor="light"
                                         type="Heading"
                                         utility="none">
-                                        React-
+                                        Social Ads
                                     </TextStyles>
                                     <TextStyles
                                         alignment="left"
@@ -54,7 +56,7 @@ function Auth(_props: DIProps): JSX.Element {
                                         textcolor="light"
                                         type="Heading"
                                         utility="none">
-                                        Boiler Plate
+                                        for Buy with Prime
                                     </TextStyles>
                                 </div>
                             }
@@ -73,7 +75,10 @@ function Auth(_props: DIProps): JSX.Element {
                                             textcolor="light"
                                             type="SubHeading"
                                             utility="none">
-                                            React boiler plate description
+                                            Create Ad campaigns for your
+                                            products with the “Buy with Prime”
+                                            badge and drive traffic through
+                                            tailored social advertising.
                                         </TextStyles>
                                     </FlexLayout>
                                 </>
@@ -82,6 +87,7 @@ function Auth(_props: DIProps): JSX.Element {
                                 <Route path="login" element={<Login />} />
                                 <Route path="forgot" element={<Forgot />} />
                                 <Route path="reset" element={<Reset />} />
+                                <Route path="register" element={<Register />} />
                                 <Route
                                     path="forgotsuccess"
                                     element={<ForgotSuccess />}

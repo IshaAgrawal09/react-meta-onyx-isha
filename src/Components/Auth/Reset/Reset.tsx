@@ -90,6 +90,7 @@ function Reset(_props: DIProps): JSX.Element {
             _props.error(RegistrationPage.PasswordNotMatched);
         }
     };
+
     const {
         confirmNewPassword,
         eyeoff,

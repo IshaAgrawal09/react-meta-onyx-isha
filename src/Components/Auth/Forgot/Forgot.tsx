@@ -174,7 +174,7 @@ function Forgot(_props: DIProps): JSX.Element {
                     }
                     length="fullBtn"
                     onClick={() => forgotLinkSend()}>
-                    Generate link
+                    Generate Link
                 </Button>
                 <TextStyles>
                     <Button

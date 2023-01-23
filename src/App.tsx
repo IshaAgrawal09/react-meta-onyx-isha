@@ -60,9 +60,9 @@ function App(Props: PropsI): JSX.Element {
                         <Route path="*" element={<>NO Page Found 2</>} />
                     </Route>
 
-                    <Route path="*" element={<Navigate to={'/auth/login'} />}>
-                        {' '}
-                    </Route>
+                    <Route
+                        path="*"
+                        element={<Navigate to={'/auth/login'} />}></Route>
                 </Routes>
                 <RenderToasts {...Props} />
             </NoInternet>
