@@ -19,6 +19,7 @@ export const cardTitleAuth = {
 };
 export const currency = 'USD';
 export const timezone = 'EST';
+export const groupCode = 'bwp-product';
 export const mail_id = 'support@cedcommerce.com';
 /**
  * Constant for REGEX we are using on app
@@ -81,6 +82,10 @@ export const urlFetchCalls = {
         resetPage: '/auth/reset/',
         loginPage: '/auth/login',
     },
+};
+
+export const externalRedirectLink = {
+    registrationReadOurPolicy: 'https://cedcommerce.com/privacy-policy',
 };
 
 /**

@@ -7,6 +7,7 @@ interface Props extends DIProps {
 }
 function Footer(_props: Props) {
     const path = window.location.pathname;
+    const date = new Date();
     const help = path.includes('help');
     return (
         <>
@@ -21,7 +22,7 @@ function Footer(_props: Props) {
                         textcolor="light"
                         type="none"
                         utility="none">
-                        CedCommerce Inc Product @2022.
+                        CedCommerce Inc Product @{date.getFullYear()}.
                     </TextStyles>
                     {_props.hideSupport != true && !help && (
                         <TextStyles

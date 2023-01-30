@@ -132,7 +132,7 @@ function Reset(_props: DIProps): JSX.Element {
                             type={'password'}
                             strength={true}
                             show={eyeoff}
-                            innerSufIcon={
+                            innerSufIcon={ 
                                 eyeoff ? (
                                     <Eye
                                         onClick={() =>

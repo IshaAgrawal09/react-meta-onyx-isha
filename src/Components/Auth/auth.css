@@ -23,6 +23,19 @@
     position: relative;
 }
 
+.otpValues {
+    width: 43px;
+    height: 44px !important;
+}
+
+.valid{
+    color: #027A48 !important
+}
+
+.invalid {
+   color: #D92D20 !important
+}
+
 .custom-card-message .timer_position {
     position: absolute;
     text-align: center;

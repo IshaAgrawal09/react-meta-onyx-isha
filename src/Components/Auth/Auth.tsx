@@ -2,7 +2,7 @@
 import React from 'react';
 import { DIProps, DI } from '../../Core';
 import { Navigate, Route, Routes, useParams } from 'react-router-dom';
-import { FlexLayout, LRLayout, TextStyles } from '@cedcommerce/ounce-ui';
+import { Alert, FlexLayout, LRLayout, TextStyles } from '@cedcommerce/ounce-ui';
 import Footer from '../Footer/Footer';
 import './auth.css';
 import Login from './Login/Login';
@@ -80,6 +80,14 @@ function Auth(_props: DIProps): JSX.Element {
                                             badge and drive traffic through
                                             tailored social advertising.
                                         </TextStyles>
+                                        {match['*']?.includes('register') ? (
+                                            <Alert type="warning">
+                                                Please do not close the window,
+                                                else it would lead to
+                                                re-installation from Buy with
+                                                Prime Console.
+                                            </Alert>
+                                        ) : null}
                                     </FlexLayout>
                                 </>
                             }>
@@ -88,6 +96,10 @@ function Auth(_props: DIProps): JSX.Element {
                                 <Route path="forgot" element={<Forgot />} />
                                 <Route path="reset" element={<Reset />} />
                                 <Route path="register" element={<Register />} />
+                                <Route
+                                    path=":uId/register"
+                                    element={<Register />}
+                                />
                                 <Route
                                     path="forgotsuccess"
                                     element={<ForgotSuccess />}
