@@ -351,10 +351,11 @@ a .Polaris-Icon {
 
 hr {
   border-top: 1px solid #E1E3E5;
-  margin: 0;
+  margin: 16px 0;
   border-bottom: none;
   box-shadow: unset;
 }
+
 
 .z-set .Polaris-Connected__Item--primary {
   z-index: 0;
@@ -366,6 +367,7 @@ hr {
 .product-grid .ant-table tbody h3.inte__text.inte__text--dark {
   color: #4E4F52 !important;
 }
+
 /*===welcome onboard==*/
 @media only screen and (min-width: 768px) {
   .card_switcher >.inte-flex > div:first-child{ 
@@ -379,6 +381,7 @@ hr {
 }
 
 .custom-info-onboard {
+  margin: 24px 0;
   padding: 16px;
   background: #F3F4F5;
   border: 1px solid #E0E1E3;

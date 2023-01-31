@@ -183,7 +183,6 @@ const Register = (_props: PropsI): JSX.Element => {
             if (res.success) {
                 const url = `${otpMail}?email=${email}&subject=${subject.otpMailSend}&templateSource=${APP_SOURCE_NAME}`;
                 _props.di.GET(url).then((result) => {
-                    console.log(result, 'otp');
                     const { success, message, no_of_attempts_left } = result;
                     if (success) {
                         setAttempt(no_of_attempts_left);
@@ -199,6 +198,12 @@ const Register = (_props: PropsI): JSX.Element => {
                             registerLoading: false,
                         });
                     }
+                });
+            } else {
+                _props.error(res.message);
+                setLoading({
+                    ...loading,
+                    registerLoading: false,
                 });
             }
         });

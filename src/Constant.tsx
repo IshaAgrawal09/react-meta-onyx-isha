@@ -13,14 +13,14 @@ export const APP_TARGET_NAME = 'meta';
 export const cardTitleAuth = {
     login: 'Login',
     register: 'Create Account',
-    forgot: 'Generate Password Reset Link',
-    reset: 'Reset Password',
+    forgot: 'Generate Password Reset link',
+    reset: 'Reset password',
     default: '',
 };
 export const currency = 'USD';
 export const timezone = 'EST';
 export const groupCode = 'bwp-product';
-export const mail_id = 'support@cedcommerce.com';
+export const bwpMailId = 'bwp_meta@cedcommerce.com';
 /**
  * Constant for REGEX we are using on app
  */
@@ -85,13 +85,24 @@ export const urlFetchCalls = {
 };
 
 export const externalRedirectLink = {
+    contentGuideUrl:
+        'https://www.facebook.com/business/help/223409425500940?id=271710926837064',
     registrationReadOurPolicy: 'https://cedcommerce.com/privacy-policy',
+    onboardingCheckoutGuide:
+        'https://www.facebook.com/business/help/120325381656392?id=725943027795860',
+    onboardingAboutMetaPixel:
+        'https://www.facebook.com/business/help/471978536642445?id=1205376682832142',
+    onboardingFacebookCatalog:
+        'https://www.facebook.com/business/help/2086567618225367?id=725943027795860',
+    editProductOnBWPConsole:
+        'https://console.buywithprime.amazon.com/login?redirectURI=%2Fproducts',
+    supportCedcommerce: 'https://socialsadsforbwp.freshdesk.com/support/home',
 };
-
 /**
  * Email Templates Mail Subjects
  */
 export const subject = {
-    passwordReset: 'Reset your password for React-Boiler Plate',
+    passwordReset:
+        'Reset your password for Social Ads for Buy with Prime Account',
     otpMailSend: 'Your One-time passcode for Email verification',
 };
