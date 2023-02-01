@@ -6,12 +6,10 @@ import { syncNecessaryInfo, syncConnectorInfo } from '../../../Actions';
 import { urlFetchCalls } from '../../../Constant';
 
 interface Onboard extends DIProps {
-    callback: any;
     syncNecessaryInfo: any;
     syncConnectorInfo: any;
 }
 const SuccessOnboarding = (_props: Onboard): JSX.Element => {
-    // what is _props.callback()
     const [progress, setProgress] = useState(0);
     const [message, setMessage] = useState('Setting up your account');
 
@@ -22,10 +20,12 @@ const SuccessOnboarding = (_props: Onboard): JSX.Element => {
     var timer;
     if (progress >= 50) {
         timer = setTimeout(() => {
-            setProgress(progress + 20);
+            _props.di.globalState.set('onboarding', 'false');
+            setProgress(progress + 10);
         }, 300);
-    } else if (progress == 100) {
-        _props.callback() && clearTimeout(timer);
+    }
+    if (progress == 100) {
+        clearTimeout(timer);
     }
 
     const progressBar = async () => {
@@ -35,7 +35,7 @@ const SuccessOnboarding = (_props: Onboard): JSX.Element => {
         await _props.syncNecessaryInfo();
         _props.di.GET(setDataInDynamo);
         setProgress(50);
-        setMessage('Prepping your Dashboard');
+        setMessage('Preparing your Dashboard');
     };
 
     useEffect(() => {
