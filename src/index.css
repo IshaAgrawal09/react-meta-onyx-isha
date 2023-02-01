@@ -395,6 +395,10 @@ button.inte-fbBtn:hover {
     background-color: rgb(54 85 149);
 }
 
+button.inte-btn-disable {
+    opacity: 0.4 !important;
+}
+
 
 .inte__Main {
     position: relative;

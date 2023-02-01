@@ -57,6 +57,7 @@ function Login(_props: PropsI): JSX.Element {
             );
             token && navigate(`/panel/${_props.redux.user_id}/dashboard`);
         } else {
+            debugger;
             dispatcher({
                 type: 'logout',
                 state: {},

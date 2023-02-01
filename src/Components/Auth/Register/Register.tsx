@@ -50,6 +50,7 @@ const Register = (_props: PropsI): JSX.Element => {
     } = _props;
     const onyxShopId = current?.source._id;
     const match = useParams();
+    console.log(_props.match, 'match');
     const [state, setState] = useState<registerStateObj>({
         brand: '',
         email: '',
@@ -92,16 +93,6 @@ const Register = (_props: PropsI): JSX.Element => {
     const [activeIndex, setActiveIndex] = useState<number>(0);
 
     useEffect(() => {
-        dispacher({
-            type: 'logout',
-            state: {},
-        });
-        if (!match['*']?.includes('/register'))
-            _props.di.globalState.removeLocalStorage('auth_token');
-        tokenCheck();
-    }, []);
-
-    useEffect(() => {
         if (token != '') {
             const tokenDecoded = parseJwt(token);
             dispacher({
@@ -127,6 +118,16 @@ const Register = (_props: PropsI): JSX.Element => {
             }
         }
     }, [_props.match.uId]);
+
+    useEffect(() => {
+        dispacher({
+            type: 'logout',
+            state: {},
+        });
+        if (!match['*']?.includes('/register'))
+            _props.di.globalState.removeLocalStorage('auth_token');
+        tokenCheck();
+    }, []);
 
     const tokenCheck = () => {
         const queryParams: any = queryString.parse(_props.location.search);

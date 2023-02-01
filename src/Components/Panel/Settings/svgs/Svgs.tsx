@@ -2173,9 +2173,9 @@ export const SuccessOnboardingIcon = () => (
         <path
             d="M80 45L52.5 72.5L40 60"
             stroke="#027A48"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
         />
     </svg>
 );
@@ -2413,8 +2413,8 @@ export const PerformanceIco = () => (
             <path
                 d="M70.5 38.3218C70.5 34.6026 69.7758 30.9197 68.3686 27.4835C66.9615 24.0474 64.899 20.9252 62.299 18.2953C59.6989 15.6653 56.6123 13.5792 53.2151 12.1559C49.818 10.7326 46.177 10 42.5 10C38.823 10 35.182 10.7326 31.7849 12.1559C28.3877 13.5792 25.301 15.6653 22.701 18.2953C20.101 20.9252 18.0385 24.0474 16.6314 27.4835C15.2242 30.9197 14.5 34.6026 14.5 38.3218"
                 stroke="#ECEDEE"
-                stroke-width="4"
-                stroke-linecap="round"
+                strokeWidth="4"
+                strokeLinecap="round"
             />
         </g>
         <path
