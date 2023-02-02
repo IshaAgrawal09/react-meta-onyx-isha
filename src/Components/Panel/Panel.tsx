@@ -4,6 +4,7 @@ import { StoreDispatcher } from '../../index';
 import { DI, DIProps } from '../../Core';
 import Onboarding from './Onboarding/Onboarding';
 import { syncNecessaryInfo, syncConnectorInfo } from '../../Actions';
+import PanelLayout from './PanelLayout';
 
 export interface PanelProps extends DIProps {
     name?: string;
@@ -42,7 +43,11 @@ const Panel = (_props: PanelProps): JSX.Element => {
                 path="/dashboard"
                 element={
                     <Suspense fallback={<></>}>
-                        <Onboarding />
+                        {/* {_props?.redux?.basic?.stepActive ? ( */}
+                        <PanelLayout />
+                        {/* ) : (
+                            <Onboarding />
+                        )} */}
                     </Suspense>
                 }>
                 <Route path="*" element={<>NO Page Found 2</>} />

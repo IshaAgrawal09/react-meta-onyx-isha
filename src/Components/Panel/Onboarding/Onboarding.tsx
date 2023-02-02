@@ -25,11 +25,11 @@ import {
 } from '../../../Constant';
 import Footer from '../../Footer/Footer';
 import { DI, DIProps } from '../../../Core';
+import { syncConnectorInfo, syncNecessaryInfo } from '../../../Actions';
 import SuccessOnboarding from './SuccessOnboarding';
 interface Props extends DIProps {
     syncNecessaryInfo: any;
     syncConnectorInfo: any;
-    // setOnboardingComplete: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const Onboarding = (_props: Props): JSX.Element => {
@@ -41,7 +41,6 @@ const Onboarding = (_props: Props): JSX.Element => {
 
     const {
         redux: { user_id, current },
-        // setOnboardingComplete,
     } = _props;
 
     const {
@@ -108,9 +107,10 @@ const Onboarding = (_props: Props): JSX.Element => {
                 localStorage.removeItem('CanImport');
             }
         });
-        if (localStorage.getItem('errorMsgForFB') != undefined) {
+        if (localStorage.getItem('errorMsgForFB')) {
+            console.log('&&&&&');
             setErrorMsgForFB(localStorage.getItem('errorMsgForFB'));
-            localStorage.removeItem('errorMsgForFB');
+            // localStorage.removeItem('errorMsgForFB');
         }
     };
     return (
@@ -479,4 +479,6 @@ const Onboarding = (_props: Props): JSX.Element => {
     );
 };
 
-export default DI(Onboarding);
+export default DI(Onboarding, {
+    func: { syncConnectorInfo, syncNecessaryInfo },
+});

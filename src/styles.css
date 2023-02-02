@@ -428,6 +428,11 @@ hr {
   margin: 0px auto;
 }
 
+.cedcossLogo {
+  background: linear-gradient(180deg, #FFFFFF 0%, #D0D5DD 100%);
+border-radius: 6.75px;
+}
+
 .custom-progress-success p {
   margin-bottom: 12px !important;
 }
