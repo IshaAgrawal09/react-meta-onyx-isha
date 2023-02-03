@@ -43,9 +43,9 @@ const Onboarding = (_props: Props): JSX.Element => {
         redux: { user_id, current },
     } = _props;
 
-    const {
-        get: { installtionForm, setDataInDynamo },
-    } = urlFetchCalls;
+    // const {
+    //     get: { installtionForm, setDataInDynamo },
+    // } = urlFetchCalls;
 
     const onyxShopId = current?.source?._id;
 
@@ -85,7 +85,7 @@ const Onboarding = (_props: Props): JSX.Element => {
 
         const win = window.open(url);
         setDisableButton(true);
-        console.log(win);
+
         const int = setInterval(async () => {
             if (win?.closed) {
                 const canImport = localStorage.getItem('CanImport');
@@ -108,7 +108,6 @@ const Onboarding = (_props: Props): JSX.Element => {
             }
         });
         if (localStorage.getItem('errorMsgForFB')) {
-            console.log('&&&&&');
             setErrorMsgForFB(localStorage.getItem('errorMsgForFB'));
             // localStorage.removeItem('errorMsgForFB');
         }

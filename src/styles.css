@@ -428,9 +428,20 @@ hr {
   margin: 0px auto;
 }
 
-.cedcossLogo {
-  background: linear-gradient(180deg, #FFFFFF 0%, #D0D5DD 100%);
-border-radius: 6.75px;
+span.red-dot {
+  background: #D62C20;
+  height: 10px;
+  width: 10px;
+  display: inline-block;
+  border-radius: 50px;
+  position: absolute;
+  right: -4px;
+  z-index: 9;
+  top: 2px;
+}
+
+span.red-dot>button {
+  position: relative;
 }
 
 .custom-progress-success p {
