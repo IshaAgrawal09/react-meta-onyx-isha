@@ -221,6 +221,7 @@ p.Paragraph {
 }
 
 .icon-overlapping_icon {
+    padding-left: 20px;
     position: relative;
     margin-left: -16px;
     width: 28px;

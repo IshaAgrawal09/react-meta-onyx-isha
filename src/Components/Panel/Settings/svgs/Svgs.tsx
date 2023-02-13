@@ -131,100 +131,6 @@ export const Instagram = () => (
     </svg>
 );
 
-export const Facebook = () => (
-    <svg
-        width="29"
-        height="28"
-        viewBox="0 0 29 28"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg">
-        <g filter="url(#filter0_d_7690_24486)">
-            <g clipPath="url(#clip0_7690_24486)">
-                <rect
-                    x="2.5"
-                    y="1"
-                    width="24"
-                    height="24"
-                    rx="12"
-                    fill="#E6E6E6"
-                />
-                <path
-                    d="M14.9997 1.33333C8.55618 1.33333 3.33301 6.5565 3.33301 13C3.33301 19.4435 8.55618 24.6667 14.9997 24.6667C21.4432 24.6667 26.6663 19.4435 26.6663 13C26.6663 6.5565 21.4432 1.33333 14.9997 1.33333Z"
-                    fill="url(#paint0_linear_7690_24486)"
-                />
-                <path
-                    d="M16.5789 16.0922H19.5982L20.0725 13.0251H16.5789V11.3486C16.5789 10.0746 16.9954 8.94466 18.1872 8.94466H20.1022V6.26832C19.7657 6.22282 19.054 6.12366 17.7094 6.12366C14.9012 6.12366 13.2551 7.60649 13.2551 10.9852V13.0257H10.3682V16.0928H13.2545V24.5232C13.8262 24.6083 14.4054 24.6667 14.9998 24.6667C15.5371 24.6667 16.0615 24.6177 16.5789 24.5477V16.0922Z"
-                    fill="white"
-                />
-            </g>
-            <rect
-                x="3"
-                y="1.5"
-                width="23"
-                height="23"
-                rx="11.5"
-                stroke="white"
-            />
-        </g>
-        <defs>
-            <filter
-                id="filter0_d_7690_24486"
-                x="0.5"
-                y="0"
-                width="28"
-                height="28"
-                filterUnits="userSpaceOnUse"
-                colorInterpolationFilters="sRGB">
-                <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                <feColorMatrix
-                    in="SourceAlpha"
-                    type="matrix"
-                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                    result="hardAlpha"
-                />
-                <feOffset dy="1" />
-                <feGaussianBlur stdDeviation="1" />
-                <feComposite in2="hardAlpha" operator="out" />
-                <feColorMatrix
-                    type="matrix"
-                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
-                />
-                <feBlend
-                    mode="normal"
-                    in2="BackgroundImageFix"
-                    result="effect1_dropShadow_7690_24486"
-                />
-                <feBlend
-                    mode="normal"
-                    in="SourceGraphic"
-                    in2="effect1_dropShadow_7690_24486"
-                    result="shape"
-                />
-            </filter>
-            <linearGradient
-                id="paint0_linear_7690_24486"
-                x1="6.82892"
-                y1="4.82925"
-                x2="24.6918"
-                y2="22.6921"
-                gradientUnits="userSpaceOnUse">
-                <stop stopColor="#2AA4F4" />
-                <stop offset="1" stopColor="#007AD9" />
-            </linearGradient>
-            <clipPath id="clip0_7690_24486">
-                <rect
-                    x="2.5"
-                    y="1"
-                    width="24"
-                    height="24"
-                    rx="12"
-                    fill="white"
-                />
-            </clipPath>
-        </defs>
-    </svg>
-);
-
 export const FacebookWhiteico = () => (
     <svg
         width="24"
@@ -590,6 +496,100 @@ export const NotFound = () => (
                     height="220.431"
                     fill="white"
                     transform="translate(0.330566)"
+                />
+            </clipPath>
+        </defs>
+    </svg>
+);
+
+export const Facebook = () => (
+    <svg
+        width="29"
+        height="28"
+        viewBox="0 0 29 28"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#filter0_d_7690_24486)">
+            <g clipPath="url(#clip0_7690_24486)">
+                <rect
+                    x="2.5"
+                    y="1"
+                    width="24"
+                    height="24"
+                    rx="12"
+                    fill="#E6E6E6"
+                />
+                <path
+                    d="M14.9997 1.33333C8.55618 1.33333 3.33301 6.5565 3.33301 13C3.33301 19.4435 8.55618 24.6667 14.9997 24.6667C21.4432 24.6667 26.6663 19.4435 26.6663 13C26.6663 6.5565 21.4432 1.33333 14.9997 1.33333Z"
+                    fill="url(#paint0_linear_7690_24486)"
+                />
+                <path
+                    d="M16.5789 16.0922H19.5982L20.0725 13.0251H16.5789V11.3486C16.5789 10.0746 16.9954 8.94466 18.1872 8.94466H20.1022V6.26832C19.7657 6.22282 19.054 6.12366 17.7094 6.12366C14.9012 6.12366 13.2551 7.60649 13.2551 10.9852V13.0257H10.3682V16.0928H13.2545V24.5232C13.8262 24.6083 14.4054 24.6667 14.9998 24.6667C15.5371 24.6667 16.0615 24.6177 16.5789 24.5477V16.0922Z"
+                    fill="white"
+                />
+            </g>
+            <rect
+                x="3"
+                y="1.5"
+                width="23"
+                height="23"
+                rx="11.5"
+                stroke="white"
+            />
+        </g>
+        <defs>
+            <filter
+                id="filter0_d_7690_24486"
+                x="0.5"
+                y="0"
+                width="28"
+                height="28"
+                filterUnits="userSpaceOnUse"
+                colorInterpolationFilters="sRGB">
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                <feColorMatrix
+                    in="SourceAlpha"
+                    type="matrix"
+                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                    result="hardAlpha"
+                />
+                <feOffset dy="1" />
+                <feGaussianBlur stdDeviation="1" />
+                <feComposite in2="hardAlpha" operator="out" />
+                <feColorMatrix
+                    type="matrix"
+                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                />
+                <feBlend
+                    mode="normal"
+                    in2="BackgroundImageFix"
+                    result="effect1_dropShadow_7690_24486"
+                />
+                <feBlend
+                    mode="normal"
+                    in="SourceGraphic"
+                    in2="effect1_dropShadow_7690_24486"
+                    result="shape"
+                />
+            </filter>
+            <linearGradient
+                id="paint0_linear_7690_24486"
+                x1="6.82892"
+                y1="4.82925"
+                x2="24.6918"
+                y2="22.6921"
+                gradientUnits="userSpaceOnUse">
+                <stop stopColor="#2AA4F4" />
+                <stop offset="1" stopColor="#007AD9" />
+            </linearGradient>
+            <clipPath id="clip0_7690_24486">
+                <rect
+                    x="2.5"
+                    y="1"
+                    width="24"
+                    height="24"
+                    rx="12"
+                    fill="white"
                 />
             </clipPath>
         </defs>
