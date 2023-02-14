@@ -15,20 +15,33 @@ import {
 
 import Table, { ColumnsType } from 'antd/es/table';
 import React, { useState } from 'react';
-import {
-    AlertTriangle,
-    ChevronDown,
-    ChevronUp,
-    Download,
-    Filter,
-    MoreVertical,
-    Plus,
-} from 'react-feather';
+import { AlertTriangle, Download, Filter, Plus } from 'react-feather';
+import { urlFetchCalls } from '../../../Constant';
+import { DI, DIProps } from '../../../Core';
 import { Facebook, Instagram } from '../Settings/svgs/Svgs';
 import DashboardAction from './DashboardAction';
+import { createUrl } from './Functions';
 import { StaticGridData } from './StaticData';
 import { DataTypeI } from './types';
-const Dashboard = () => {
+
+interface ParamsInterface {
+    shop_id: number;
+    'filter[shop_id]': number;
+    'filter[campaign_name]'?: string;
+    activePage: number;
+    count: number;
+    order?: number | string;
+    sort?: number;
+}
+
+// interface dashboardI extends DIProps {}
+
+const Dashboard = (_props: DIProps) => {
+    const {
+        di: { globalState, GET, POST, environment },
+        history,
+    } = _props;
+
     let columns: ColumnsType<DataTypeI> = [
         {
             title: 'Campaign',
@@ -187,8 +200,20 @@ const Dashboard = () => {
         },
     ];
 
+    const facebookShopId = _props.redux.current?.target?._id;
+
+    let staticParams = {
+        shop_id: facebookShopId,
+        'filter[shop_id]': facebookShopId,
+        activePage: 1,
+        count: 5,
+    };
+
+    const localParams: any = _props.di.globalState.get('campaign_params');
+    const { get, post } = urlFetchCalls;
+
     const [gridColumn, setGridColumn] = useState(columns);
-    console.log(gridColumn);
+
     const [openActionModal, setOpenActionModal] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState<String[]>([]);
     const [enableApplyFilter, setEnableApplyFilter] = useState(false);
@@ -197,6 +222,18 @@ const Dashboard = () => {
 
     const [manageColumns, setManageColumns] = useState(false);
     const [addManageColumns, setAddManageColumns] = useState<String[]>([]);
+
+    const [params, setParams] = useState<ParamsInterface>(staticParams);
+
+    if (localParams != null) {
+        staticParams = JSON.parse(localParams);
+    }
+
+    const endPoint: string = `${environment.API_ENDPOINT}${
+        get.bulkExportCSV
+    }?shop_id=${facebookShopId}&bearer=${globalState.getBearerToken()}`;
+
+    const downloadCsvUrl = createUrl(endPoint, params);
 
     const openAction = (index: object) => {
         setOpenActionModal(!openActionModal);
@@ -345,7 +382,10 @@ const Dashboard = () => {
                         content="Campaigns"
                         subheadingTypes="SM-1.8"
                         type="SubHeading"></TextStyles>
-                    <Button type="Outlined" icon={<Download />}>
+                    <Button
+                        type="Outlined"
+                        icon={<Download />}
+                        onClick={() => window.open(downloadCsvUrl)}>
                         Download Report
                     </Button>
                 </FlexLayout>
@@ -494,4 +534,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default DI(Dashboard);
