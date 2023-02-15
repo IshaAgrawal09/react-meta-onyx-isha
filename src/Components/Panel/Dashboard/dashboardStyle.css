@@ -2,3 +2,18 @@
   width: 80%;
   margin: 0 auto;
 }
+
+.custom_th_shorting span.inte__ToolTip-trigger,
+.download_tooltip  .inte__text,
+span.custom_tooltip_label {
+    border-bottom: 2px dashed #333;
+}
+
+.download_tooltip .inte-btn .inte__text {
+  line-height: unset;
+}
+
+.download_tooltip .inte-btn {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
