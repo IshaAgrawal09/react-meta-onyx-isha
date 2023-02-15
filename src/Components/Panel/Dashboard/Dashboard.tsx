@@ -15,7 +15,7 @@ import {
 } from '@cedcommerce/ounce-ui';
 
 import Table, { ColumnsType } from 'antd/es/table';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AlertTriangle, Download, Filter, Plus } from 'react-feather';
 import { urlFetchCalls } from '../../../Constant';
 import { DI, DIProps } from '../../../Core';
@@ -25,6 +25,7 @@ import { createUrl } from './Functions';
 import { StaticGridData } from './StaticData';
 import { DataTypeI } from './types';
 import './dashboardStyle.css';
+import DashboardBanner from './DashboardBanner';
 
 interface ParamsInterface {
     shop_id: number;
@@ -363,6 +364,46 @@ const Dashboard = (_props: DIProps) => {
     const [addManageColumns, setAddManageColumns] = useState<String[]>([]);
 
     const [params, setParams] = useState<ParamsInterface>(staticParams);
+    const [initLoading, setInitLoading] = useState(false);
+    const [paymentBanner, setPaymentBanner] = useState(false);
+    const [instaBanner, setInstaBanner] = useState(false);
+
+    useEffect(() => {
+        initCampaign(get.initCampaignUrl);
+    }, []);
+
+    const initCampaignParams = {
+        shop_id: facebookShopId,
+    };
+
+    const initCampaign = (url: string) => {
+        setInitLoading(true);
+        _props.di.GET(url, initCampaignParams).then((result) => {
+            console.log(result);
+            const { success, data, error } = result;
+            if (success) {
+                if (!data.payment_setup) {
+                    setPaymentBanner(true);
+                    if (
+                        _props.di.globalState.get('showPaymentBanner') ==
+                        undefined
+                    ) {
+                        _props.di.globalState.set(
+                            'showPaymentBanner',
+                            JSON.stringify(true)
+                        );
+                    }
+                }
+                if (!data.is_instagram_connected) {
+                    setInstaBanner(true);
+                    _props.di.globalState.set(
+                        'showInstaBanner',
+                        JSON.stringify(true)
+                    );
+                }
+            }
+        });
+    };
 
     if (localParams != null) {
         staticParams = JSON.parse(localParams);
@@ -373,10 +414,6 @@ const Dashboard = (_props: DIProps) => {
     }?shop_id=${facebookShopId}&bearer=${globalState.getBearerToken()}`;
 
     const downloadCsvUrl = createUrl(endPoint, params);
-
-    const openAction = (index: object) => {
-        setOpenActionModal(!openActionModal);
-    };
 
     const statusFiltersAvailable = [
         'Archived',
@@ -514,6 +551,12 @@ const Dashboard = (_props: DIProps) => {
                 }
                 description="Create and manage all your Buy with Prime Facebook and Instagram campaigns here."
             />
+            {(paymentBanner || instaBanner) && (
+                <DashboardBanner
+                    paymentBanner={paymentBanner}
+                    instaBanner={instaBanner}
+                />
+            )}
             <Card>
                 <FlexLayout halign="fill" valign="center">
                     <ToolTip
