@@ -1,4 +1,5 @@
 import {
+    Accordion,
     AdvanceFilter,
     AutoComplete,
     Badge,
@@ -7,9 +8,11 @@ import {
     CheckBox,
     FlexChild,
     FlexLayout,
+    Modal,
     PageHeader,
     Pagination,
     Popover,
+    Skeleton,
     TextStyles,
     ToolTip,
 } from '@cedcommerce/ounce-ui';
@@ -44,6 +47,31 @@ const Dashboard = (_props: DIProps) => {
         di: { globalState, GET, POST, environment },
         history,
     } = _props;
+
+    const { get, post } = urlFetchCalls;
+
+    const [errorModal, setErrorModal] = useState(false);
+    const [errorArray, setErrorArray] = useState([]);
+    const [solutions, setSolutions] = useState<any>([{}]);
+    const [loadingErrorModal, setLoadingErrorModal] = useState(false);
+
+    const openErrorModalFunc = (error: any) => {
+        setErrorModal(true);
+        setErrorArray(error);
+        const errorPayload = error.map((item: any) => ({
+            title: item.title,
+            marketplace: 'meta',
+        }));
+        setLoadingErrorModal(true);
+        POST(post.solutionsUrl, errorPayload)
+            .then((result: any) => {
+                const { success, data } = result;
+                if (success) {
+                    setSolutions([...solutions, data]);
+                }
+            })
+            .finally(() => setLoadingErrorModal(false));
+    };
 
     let columns: ColumnsType<DataTypeI> = [
         {
@@ -96,28 +124,33 @@ const Dashboard = (_props: DIProps) => {
             render: (event) => {
                 return (
                     <>
-                        {event === 'Error' ? (
-                            <Button icon={<AlertTriangle />} type="DangerPlain">
+                        {event[0] === 'Error' ? (
+                            <Button
+                                icon={<AlertTriangle />}
+                                type="DangerPlain"
+                                onClick={() => {
+                                    openErrorModalFunc(event[1]);
+                                }}>
                                 Error
                             </Button>
                         ) : (
                             <Badge
                                 type={
-                                    event === 'Paused'
+                                    event[0] === 'Paused'
                                         ? 'Warning-200'
-                                        : event === 'Pending'
+                                        : event[0] === 'Pending'
                                         ? 'Neutral-100-Border'
-                                        : event === 'Scheduled'
+                                        : event[0] === 'Scheduled'
                                         ? 'Positive-100'
-                                        : event === 'Active'
+                                        : event[0] === 'Active'
                                         ? 'Positive-200'
-                                        : event === 'Archived'
+                                        : event[0] === 'Archived'
                                         ? 'Info-100'
-                                        : event === 'Disconnected'
+                                        : event[0] === 'Disconnected'
                                         ? 'Neutral-100'
                                         : 'Neutral-200'
                                 }>
-                                {event}
+                                {event[0]}
                             </Badge>
                         )}
                     </>
@@ -350,7 +383,6 @@ const Dashboard = (_props: DIProps) => {
     };
 
     const localParams: any = _props.di.globalState.get('campaign_params');
-    const { get, post } = urlFetchCalls;
 
     const [gridColumn, setGridColumn] = useState(columns);
 
@@ -369,7 +401,11 @@ const Dashboard = (_props: DIProps) => {
     const [instaBanner, setInstaBanner] = useState(false);
 
     useEffect(() => {
-        initCampaign(get.initCampaignUrl);
+        if (
+            _props.di.globalState.get('showPaymentBanner') == undefined ||
+            _props.di.globalState.get('showInstaBanner') == undefined
+        )
+            initCampaign(get.initCampaignUrl);
     }, []);
 
     const initCampaignParams = {
@@ -379,10 +415,21 @@ const Dashboard = (_props: DIProps) => {
     const initCampaign = (url: string) => {
         setInitLoading(true);
         _props.di.GET(url, initCampaignParams).then((result) => {
-            console.log(result);
             const { success, data, error } = result;
             if (success) {
-                if (!data.payment_setup) {
+                if (data.is_instagram_connected === false) {
+                    setInstaBanner(true);
+                    if (
+                        _props.di.globalState.get('showInstaBanner') ==
+                        undefined
+                    ) {
+                        _props.di.globalState.set(
+                            'showInstaBanner',
+                            JSON.stringify(true)
+                        );
+                    }
+                }
+                if (data.payment_setup === false) {
                     setPaymentBanner(true);
                     if (
                         _props.di.globalState.get('showPaymentBanner') ==
@@ -393,13 +440,6 @@ const Dashboard = (_props: DIProps) => {
                             JSON.stringify(true)
                         );
                     }
-                }
-                if (!data.is_instagram_connected) {
-                    setInstaBanner(true);
-                    _props.di.globalState.set(
-                        'showInstaBanner',
-                        JSON.stringify(true)
-                    );
                 }
             }
         });
@@ -760,6 +800,51 @@ const Dashboard = (_props: DIProps) => {
                     </div>
                 </div>
             </Card>
+            <Modal
+                open={errorModal}
+                close={() => setErrorModal(!errorModal)}
+                heading="Errors"
+                modalSize="small">
+                {loadingErrorModal ? (
+                    <Skeleton height="50px" line={3} type="line" width="50px" />
+                ) : (
+                    errorArray?.map((item: any, index: number) => {
+                        return (
+                            <FlexLayout
+                                spacing="loose"
+                                valign="start"
+                                wrap="noWrap"
+                                key={index}>
+                                <AlertTriangle
+                                    color="#C4281C"
+                                    size="20"
+                                    style={{ display: 'block' }}
+                                />
+                                <FlexChild desktopWidth="100">
+                                    <FlexLayout direction="vertical">
+                                        <TextStyles
+                                            alignment="left"
+                                            fontweight="extraBold"
+                                            textcolor="dark"
+                                            type="neutralText"
+                                            utility="none">
+                                            {item?.title}
+                                        </TextStyles>
+                                        <TextStyles
+                                            alignment="left"
+                                            fontweight="normal"
+                                            textcolor="dark"
+                                            type="none"
+                                            utility="custom-heading_camp1">
+                                            {item?.description}
+                                        </TextStyles>
+                                    </FlexLayout>
+                                </FlexChild>
+                            </FlexLayout>
+                        );
+                    })
+                )}
+            </Modal>
         </>
     );
 };

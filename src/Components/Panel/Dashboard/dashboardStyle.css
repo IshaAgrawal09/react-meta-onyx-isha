@@ -2,9 +2,12 @@
   width: 80%;
   margin: 0 auto;
 }
+.download_tooltip {
+  border-bottom: 2px dashed #333 !important;
+}
 
 .custom_th_shorting span.inte__ToolTip-trigger,
-.download_tooltip  .inte__text,
+.download_tooltip .inte-btn .inte__text,
 span.custom_tooltip_label {
     border-bottom: 2px dashed #333;
 }

@@ -9,9 +9,10 @@ import {
     TextStyles,
     Topbar,
 } from '@cedcommerce/ounce-ui';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Bell } from 'react-feather';
 import { Route, Routes } from 'react-router-dom';
+import { StoreDispatcher } from '../../../src';
 
 import Logo from '../../Asests/Images/svg/Logo';
 import MobileLogo from '../../Asests/Images/svg/MobileLogo';
@@ -30,6 +31,8 @@ const PanelLayout = (props: DIProps): JSX.Element => {
     const [openNotification, setOpenNotification] = useState(false);
     const [openModalLogout, setOpenModalLogout] = useState(false);
 
+    const dispatcher = useContext(StoreDispatcher);
+
     const onChangeHandle = (e: any) => {
         console.log(e, 'onChange');
         if (e.path === 'logout') setOpenModalLogout(true);
@@ -42,6 +45,19 @@ const PanelLayout = (props: DIProps): JSX.Element => {
         const newpAth = '/' + path.split('/')[1] + '/' + path.split('/')[3];
         console.log(newpAth);
         return path;
+    };
+
+    const logoutUser = () => {
+        dispatcher({
+            type: 'logout',
+            state: {},
+        });
+
+        props.history('/auth');
+        props.di.globalState.removeLocalStorage('showInstaBanner');
+        props.di.globalState.removeLocalStorage('showPaymentBanner');
+        props.di.globalState.removeLocalStorage('auth_token');
+        setOpenModalLogout(false);
     };
 
     function panelRoutes() {
@@ -103,7 +119,7 @@ const PanelLayout = (props: DIProps): JSX.Element => {
                 primaryAction={{
                     content: 'Log Out',
                     loading: false,
-                    onClick: function noRefCheck() {},
+                    onClick: () => logoutUser(),
                 }}
                 secondaryAction={{
                     content: 'Cancel',

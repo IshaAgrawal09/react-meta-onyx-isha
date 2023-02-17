@@ -3,7 +3,7 @@ export interface DataTypeI {
     campaign_name: string;
     campaign_id?: string;
     daily_budget?: number;
-    status: string;
+    status: any;
     campaign_placement?: string[];
     start_date?: string;
     end_date?: string;
