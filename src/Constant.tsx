@@ -1,3 +1,6 @@
+import { FlexLayout, TextStyles } from '@cedcommerce/ounce-ui';
+import * as React from 'react';
+
 /**
  * App Source Name
  */
@@ -105,4 +108,44 @@ export const subject = {
     passwordReset:
         'Reset your password for Social Ads for Buy with Prime Account',
     otpMailSend: 'Your One-time passcode for Email verification',
+};
+
+// ToolTIp of dashboard Grid
+
+export const gridTooltip: any = {
+    campaign_name:
+        'Campaign Name is an indentifier for your campaigns or purpose of campaign creation. Choose what you want your campaigns to achieve, such as generating purchases or Page likes.',
+    status: 'The current status of your campaign.',
+    placement:
+        'View your data by the platform where your campaign will be shown (e.g. Facebook, Instagram).',
+    start_date: 'The date your campaign is scheduled to begin running.',
+    end_date: 'The date your campaign is scheduled to stop running.',
+    daily_budget: (
+        <FlexLayout direction="vertical" spacing="extraTight">
+            <TextStyles
+                alignment="left"
+                fontweight="normal"
+                paragraphTypes="SM-1.3"
+                subheadingTypes="XS-1.6"
+                textcolor="light"
+                type="Paragraph"
+                utility="none">
+                A budget is the amount of money that you want to spend on
+                showing people your campaigns. It's also a cost control tool. It
+                helps control your overall spending for a campaign, the same way
+                a bid strategy helps control your cost per result."
+            </TextStyles>
+            <a
+                href="https://www.facebook.com/business/help/190490051321426?id=629338044106215"
+                target="_blank">
+                Learn More
+            </a>
+        </FlexLayout>
+    ),
+    sales: `Sum of order values we get though campaign's order purchase event.`,
+    spend: `The estimated total amount of money you've spent on your campaign during its schedule running time.`,
+    impressions: `The number of times that your campaigns were on-screen.`,
+    clicks: `The number of clicks on your campaigns.`,
+    orders: `The number of purchase events attributed to your campaigns, based on information received from one or more of your connected Meta Business Tools.`,
+    roas: `The total return on campaign spend (ROAS) from purchases. This is based on information received from one or more of your connected Meta Business Tools and attributed to your campaigns.`,
 };

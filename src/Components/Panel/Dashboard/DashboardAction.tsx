@@ -4,8 +4,10 @@ import { MoreVertical } from 'react-feather';
 interface ActionI {
     action: any;
 }
+
 const DashboardAction = (_props: ActionI) => {
     const { action } = _props;
+
     const [openActionModal, setOpenActionModal] = useState(false);
 
     const openAction = () => {
@@ -16,9 +18,9 @@ const DashboardAction = (_props: ActionI) => {
         <Popover
             open={openActionModal}
             activator={
-                action.status === 'Pending' ||
-                action.status === 'Ended' ||
-                action.status === 'Archived' ? (
+                action.status[0] === 'Pending' ||
+                action.status[0] === 'Ended' ||
+                action.status[0] === 'Archived' ? (
                     <Button
                         length="fullBtn"
                         disable

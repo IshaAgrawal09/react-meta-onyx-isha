@@ -16,3 +16,28 @@ export interface DataTypeI {
     roas?: number;
     shop_id?: number;
 }
+export interface ParamsInterface {
+    shop_id: number;
+    'filter[shop_id]': number;
+    'filter[campaign_name]'?: string;
+    activePage: number;
+    count: number;
+    order?: number | string;
+    sort?: number;
+}
+
+export interface gridData {
+    [key: string]: any;
+}
+
+export interface showColumns {
+    [key: string]: boolean;
+}
+
+export interface errorModalI {
+    errorModal: boolean;
+    loadingErrorModal: boolean;
+    setErrorModal: any;
+    errorArray: Object[];
+    solutions: any;
+}
