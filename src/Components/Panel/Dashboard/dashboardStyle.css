@@ -20,3 +20,25 @@ span.custom_tooltip_label {
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
+
+.error-btn .inte__text{
+  text-decoration: underline;
+}
+
+.warning-btn .inte__text {
+ color: #B28C35 ;
+ text-decoration: underline;
+}
+
+.icon-overlapping_icon {
+  padding-left: 20px;
+  position: relative;
+  margin-left: -16px;
+  width: 28px;
+  border-radius: 100%;
+  display: inline-block;
+}
+
+.custom-icon_overlapping .icon-overlapping_icon:first-child {
+  margin-left: 0;
+}

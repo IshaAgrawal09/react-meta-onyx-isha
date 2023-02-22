@@ -1,3 +1,6 @@
+import { Facebook, Instagram } from '../Settings/svgs/Svgs';
+import * as React from 'react';
+
 export const createUrl = (endpoint: string, params: any) => {
     let link: string = endpoint;
     if (params.sort) {
@@ -34,4 +37,39 @@ export const createUrl = (endpoint: string, params: any) => {
         link = `${link}&filter[status][7]=${params['filter[status][7]']}`;
     }
     return link;
+};
+
+export const getPlacement = (placement: string[] = []) => {
+    if (
+        placement.length === 2 &&
+        placement.includes('facebook') &&
+        placement.includes('instagram')
+    ) {
+        return (
+            <>
+                <span className="icon-overlapping_icon">
+                    <Facebook />
+                </span>
+                <span className="icon-overlapping_icon">
+                    <Instagram />
+                </span>
+            </>
+        );
+    } else if (placement.length === 1 && placement.includes('facebook')) {
+        return (
+            <>
+                <span className="icon-overlapping_icon">
+                    <Facebook />
+                </span>
+            </>
+        );
+    } else if (placement.length === 1 && placement.includes('instagram')) {
+        return (
+            <>
+                <span className="icon-overlapping_icon">
+                    <Instagram />
+                </span>
+            </>
+        );
+    }
 };

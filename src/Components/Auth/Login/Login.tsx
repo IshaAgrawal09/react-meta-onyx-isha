@@ -208,7 +208,6 @@ function Login(_props: PropsI): JSX.Element {
                     placeHolder={'ex: abc@gmail.com'}
                     value={username}
                     onblur={() => {
-                        console.log(username.trim(), 'trim');
                         if (username.trim() != '') {
                             if (!username.match(emailFormat)) {
                                 setErrorValidation({
@@ -244,6 +243,7 @@ function Login(_props: PropsI): JSX.Element {
                         }
                     }}
                     onChange={(e: string) => {
+                        console.log(e);
                         if (e.length == 0) {
                             setErrorValidation({
                                 ...errorValidation,

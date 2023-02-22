@@ -14,7 +14,7 @@ export interface DataTypeI {
     clicks?: number;
     orders?: number;
     roas?: number;
-    shop_id?: number;
+    shop_id?: string;
 }
 export interface ParamsInterface {
     shop_id: number;
@@ -38,6 +38,14 @@ export interface errorModalI {
     errorModal: boolean;
     loadingErrorModal: boolean;
     setErrorModal: any;
+    errorArray: Object[];
+    solutions: any;
+}
+
+export interface warningModalI {
+    warningModal: boolean;
+    loadingErrorModal: boolean;
+    setWarningModal: any;
     errorArray: Object[];
     solutions: any;
 }

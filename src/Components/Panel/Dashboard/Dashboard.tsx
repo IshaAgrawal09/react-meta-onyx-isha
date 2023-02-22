@@ -17,17 +17,23 @@ import {
 
 import Table, { ColumnsType } from 'antd/es/table';
 import React, { useEffect, useState } from 'react';
-import { AlertTriangle, Download, Filter, Plus } from 'react-feather';
+import {
+    AlertOctagon,
+    AlertTriangle,
+    Download,
+    Filter,
+    Plus,
+} from 'react-feather';
 import { gridTooltip, urlFetchCalls } from '../../../Constant';
 import { DI, DIProps } from '../../../Core';
 import { Facebook, Instagram } from '../Settings/svgs/Svgs';
 import DashboardAction from './DashboardAction';
-import { createUrl } from './Functions';
+import { createUrl, getPlacement } from './Functions';
 import { StaticGridData } from './StaticData';
 import { DataTypeI, ParamsInterface, gridData, showColumns } from './types';
 import './dashboardStyle.css';
 import DashboardBanner from './DashboardBanner';
-import { ErrorModal } from './GridModal';
+import { ErrorModal, WarningModal } from './GridModal';
 
 const Dashboard = (_props: DIProps) => {
     const {
@@ -99,14 +105,40 @@ const Dashboard = (_props: DIProps) => {
                     return (
                         <>
                             {status[0] === 'Error' ? (
-                                <Button
-                                    icon={<AlertTriangle />}
-                                    type="DangerPlain"
-                                    onClick={() => {
-                                        openErrorModalFunc(status[1]);
-                                    }}>
-                                    Error
-                                </Button>
+                                <div className="error-btn">
+                                    <Button
+                                        icon={<AlertTriangle />}
+                                        type="DangerPlain"
+                                        onClick={() => {
+                                            openErrorModalFunc(status[1]);
+                                        }}>
+                                        Error
+                                    </Button>
+                                </div>
+                            ) : status[1] === 'warning' ? (
+                                <FlexLayout direction="vertical">
+                                    <FlexChild>
+                                        <Badge type="Positive-100">
+                                            {status[0]}
+                                        </Badge>
+                                    </FlexChild>
+                                    <FlexChild>
+                                        <div className="warning-btn">
+                                            <Button
+                                                icon={
+                                                    <AlertOctagon color="#B28C35" />
+                                                }
+                                                type="Plain"
+                                                onClick={() => {
+                                                    openWarningModalFunc(
+                                                        status[2]
+                                                    );
+                                                }}>
+                                                Warning
+                                            </Button>
+                                        </div>
+                                    </FlexChild>
+                                </FlexLayout>
                             ) : (
                                 <Badge
                                     type={
@@ -131,52 +163,16 @@ const Dashboard = (_props: DIProps) => {
                     );
                 };
             }
+
             if (item === 'placement') {
                 row['render'] = (_: any, event: any) => {
                     const { campaign_placement } = event;
-                    if (
-                        campaign_placement.length === 2 &&
-                        campaign_placement.includes('facebook') &&
-                        campaign_placement.includes('instagram')
-                    ) {
-                        return (
-                            <>
-                                <span className="icon-overlapping_icon">
-                                    <Facebook />
-                                </span>
-                                <span className="icon-overlapping_icon">
-                                    <Instagram />
-                                </span>
-                            </>
-                        );
-                    } else if (
-                        campaign_placement.length === 1 &&
-                        campaign_placement.includes('facebook')
-                    ) {
-                        return (
-                            <>
-                                <span className="icon-overlapping_icon">
-                                    <Facebook />
-                                </span>
-                            </>
-                        );
-                    } else if (
-                        campaign_placement.length === 1 &&
-                        campaign_placement.includes('instagram')
-                    ) {
-                        return (
-                            <>
-                                <span className="icon-overlapping_icon">
-                                    <Instagram />
-                                </span>
-                            </>
-                        );
-                    }
+                    return getPlacement(campaign_placement);
                 };
             }
             if (item === 'action') {
-                row['render'] = (_: any, index: any) => {
-                    return <DashboardAction action={index} />;
+                row['render'] = (_: any, action: any) => {
+                    return <DashboardAction action={action} />;
                 };
             }
 
@@ -188,12 +184,22 @@ const Dashboard = (_props: DIProps) => {
     };
 
     const [errorModal, setErrorModal] = useState(false);
+    const [warningModal, setWarningModal] = useState(false);
     const [errorArray, setErrorArray] = useState([]);
     const [solutions, setSolutions] = useState<any>([]);
     const [loadingErrorModal, setLoadingErrorModal] = useState(false);
 
+    const openWarningModalFunc = (error: any) => {
+        setWarningModal(true);
+        openModalFunc(error);
+    };
+
     const openErrorModalFunc = (error: any) => {
         setErrorModal(true);
+        openModalFunc(error);
+    };
+
+    const openModalFunc = (error: any) => {
         setErrorArray(error);
         const errorPayload = error.map((item: any) => ({
             title: item.title,
@@ -609,6 +615,13 @@ const Dashboard = (_props: DIProps) => {
                 solutions={solutions}
                 errorModal={errorModal}
                 setErrorModal={setErrorModal}
+                loadingErrorModal={loadingErrorModal}
+                errorArray={errorArray}
+            />
+            <WarningModal
+                solutions={solutions}
+                warningModal={warningModal}
+                setWarningModal={setWarningModal}
                 loadingErrorModal={loadingErrorModal}
                 errorArray={errorArray}
             />
