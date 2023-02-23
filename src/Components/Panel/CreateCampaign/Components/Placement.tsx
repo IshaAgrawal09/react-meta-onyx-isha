@@ -5,14 +5,30 @@ import {
     FlexLayout,
     TextStyles,
 } from '@cedcommerce/ounce-ui';
-import React from 'react';
+import React, { useState } from 'react';
 import { CheckCircle } from 'react-feather';
 
 const Placement = () => {
+    const [placementData, setPlacementData] = useState<String[]>(['facebook']);
+
+    const placementFunc = (value: string) => {
+        if (placementData.includes(value)) {
+            let update = placementData.filter((item) => {
+                if (item === value) {
+                    return false;
+                }
+                return item;
+            });
+            setPlacementData([...update]);
+        } else {
+            setPlacementData([...placementData, value]);
+        }
+    };
+
     return (
         <FlexLayout spacing="loose" valign="start" wrap="noWrap">
             <CheckCircle
-                // color={validateComplete() ? '#027A48' : '#70747E'}
+                color={placementData.length ? '#027A48' : '#70747E'}
                 size="20"
                 style={{ display: 'block' }}
             />
@@ -35,41 +51,38 @@ const Placement = () => {
                             Ads placement gets distributed between the two
                             platforms based on the Ad strength.
                         </TextStyles>
-                        <div className="mt-10 mb-10">
-                            <Alert
-                                destroy={false}
-                                onClose={function noRefCheck() {}}
-                                type="warning">
-                                Atleast one platform should be selected.
-                            </Alert>
+                        {placementData.length === 0 ? (
+                            <div className="mt-10 mb-10">
+                                <Alert
+                                    destroy={false}
+                                    onClose={function noRefCheck() {}}
+                                    type="warning">
+                                    Atleast one platform should be selected.
+                                </Alert>
+                            </div>
+                        ) : null}
+
+                        <div className="mt-10">
+                            <FlexLayout
+                                spacing="tight"
+                                direction="vertical"
+                                wrap="noWrap">
+                                <CheckBox
+                                    key={'facebookCheck'}
+                                    checked={placementData.includes('facebook')}
+                                    labelVal="Facebook"
+                                    onClick={() => placementFunc('facebook')}
+                                />
+                                <CheckBox
+                                    key={'instagramCheck'}
+                                    checked={placementData.includes(
+                                        'instagram'
+                                    )}
+                                    labelVal="Instagram"
+                                    onClick={() => placementFunc('instagram')}
+                                />
+                            </FlexLayout>
                         </div>
-                        <FlexLayout
-                            spacing="tight"
-                            direction="vertical"
-                            wrap="noWrap">
-                            <CheckBox
-                                key={'facebookCheck'}
-                                id=""
-                                checked
-                                // checked={Placement.includes('facebook')}
-                                labelVal="Facebook"
-                                name="Name"
-                                // onClick={() => {
-                                //     setPlacementArray('facebook');
-                                // }}
-                            />
-                            <CheckBox
-                                // disabled={!instagram}
-                                key={'instagramCheck'}
-                                id=""
-                                // checked={Placement.includes('instagram')}
-                                labelVal="Instagram"
-                                name="Name"
-                                // onClick={() => {
-                                //     setPlacementArray('instagram');
-                                // }}
-                            />
-                        </FlexLayout>
                     </div>
                 </>
             </FlexChild>

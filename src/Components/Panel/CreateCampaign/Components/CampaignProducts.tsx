@@ -7,8 +7,10 @@ import {
 } from '@cedcommerce/ounce-ui';
 import React from 'react';
 import { CheckCircle } from 'react-feather';
+import { campaignProductsI } from '../create';
 
-const CampaignProducts = () => {
+const CampaignProducts = (_props: campaignProductsI) => {
+    const { product_count } = _props;
     return (
         <>
             <FlexLayout spacing="loose" valign="start" wrap="noWrap">
@@ -45,25 +47,28 @@ const CampaignProducts = () => {
                                 </Button>
                             </TextStyles>
                         </div>
-                        <Alert destroy={false} type="warning">
-                            <TextStyles
-                                textcolor="dark"
-                                type="SubHeading"
-                                fontweight="bold"
-                                subheadingTypes="XS-1.6">
-                                Catalog is not synced
-                            </TextStyles>
-                            <TextStyles>
-                                You have synchronized 0 in-stock Prime-eligible
-                                products.
-                            </TextStyles>
-                        </Alert>
-                        <Alert destroy={false} type="info">
-                            <TextStyles>
-                                You have synchronized 42 in-stock Buy with
-                                Prime-eligible products.
-                            </TextStyles>
-                        </Alert>
+                        {product_count === 0 ? (
+                            <Alert destroy={false} type="warning">
+                                <TextStyles
+                                    textcolor="dark"
+                                    type="SubHeading"
+                                    fontweight="bold"
+                                    subheadingTypes="XS-1.6">
+                                    Catalog is not synced
+                                </TextStyles>
+                                <TextStyles>
+                                    You have synchronized 0 in-stock
+                                    Prime-eligible products.
+                                </TextStyles>
+                            </Alert>
+                        ) : (
+                            <Alert destroy={false} type="info">
+                                <TextStyles>
+                                    {`You have synchronized ${product_count} in-stock Buy with
+                                    Prime-eligible products.`}
+                                </TextStyles>
+                            </Alert>
+                        )}
                     </>
                 </FlexChild>
             </FlexLayout>

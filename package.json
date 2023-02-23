@@ -41,6 +41,7 @@
     "@cedcommerce/ounce-ui": "^3.5.7",
     "antd": "^5.1.7",
     "immutable": "^4.1.0",
+    "moment": "^2.29.4",
     "query-string": "^7.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

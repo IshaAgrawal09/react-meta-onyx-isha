@@ -243,7 +243,6 @@ function Login(_props: PropsI): JSX.Element {
                         }
                     }}
                     onChange={(e: string) => {
-                        console.log(e);
                         if (e.length == 0) {
                             setErrorValidation({
                                 ...errorValidation,
