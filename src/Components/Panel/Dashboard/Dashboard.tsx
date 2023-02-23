@@ -16,7 +16,7 @@ import {
 } from '@cedcommerce/ounce-ui';
 
 import Table, { ColumnsType } from 'antd/es/table';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     AlertOctagon,
     AlertTriangle,
@@ -24,22 +24,41 @@ import {
     Filter,
     Plus,
 } from 'react-feather';
+import {
+    DataTypeI,
+    ParamsInterface,
+    gridData,
+    showColumns,
+    SearchOptionsInterface,
+} from './types';
+import './dashboardStyle.css';
 import { gridTooltip, urlFetchCalls } from '../../../Constant';
 import { DI, DIProps } from '../../../Core';
-import { Facebook, Instagram } from '../Settings/svgs/Svgs';
 import DashboardAction from './DashboardAction';
 import { createUrl, getPlacement } from './Functions';
-import { StaticGridData } from './StaticData';
-import { DataTypeI, ParamsInterface, gridData, showColumns } from './types';
-import './dashboardStyle.css';
 import DashboardBanner from './DashboardBanner';
 import { ErrorModal, WarningModal } from './GridModal';
+import { prepareheaders } from '../../../Services';
+import { useParams } from 'react-router-dom';
+import { StaticGridData } from './StaticData';
+
+export interface gridParamsI {
+    shop_id: number;
+    'filter[shop_id]': number;
+    'filter[campaign_name]'?: string;
+    'filter[campaign_id]'?: number;
+    activePage: number;
+    count: number;
+    order?: number | string;
+    sort?: number;
+}
 
 const Dashboard = (_props: DIProps) => {
     const {
         di: { globalState, GET, POST, environment },
         history,
     } = _props;
+    const match = useParams();
 
     const { get, post } = urlFetchCalls;
     const [showColumns, setShowColumns] = useState<showColumns>({
@@ -60,10 +79,34 @@ const Dashboard = (_props: DIProps) => {
 
     const [sorting, setSorting] = useState();
     const [gridColumn, setGridColumn] = useState<ColumnsType<DataTypeI>>([]);
+    const [gridData, setGridData] = useState<any>(StaticGridData);
+
+    const facebookShopId = _props.redux.current?.target?._id;
+
+    let staticParams = {
+        shop_id: facebookShopId,
+        'filter[shop_id]': facebookShopId,
+        activePage: 1,
+        count: 5,
+    };
+
+    const [params, setParams] = useState<gridParamsI>(staticParams);
 
     useEffect(() => {
         updateGridColumn(showColumns);
+        // getCampaignFunc(get.getCampaignsUrl, params);
     }, []);
+
+    const getCampaignFunc = (url: string, params: any) => {
+        console.log('call');
+        GET(url, { ...params }).then((result) => {
+            const { success, data } = result;
+            if (success) {
+                console.log(data.rows, 'grid');
+                setGridData(data.rows);
+            }
+        });
+    };
 
     const updateGridColumn = (col: any) => {
         let tempArray: any = [];
@@ -104,22 +147,22 @@ const Dashboard = (_props: DIProps) => {
                     const { status } = event;
                     return (
                         <>
-                            {status[0] === 'Error' ? (
+                            {status === 'ERROR' ? (
                                 <div className="error-btn">
                                     <Button
                                         icon={<AlertTriangle />}
                                         type="DangerPlain"
                                         onClick={() => {
-                                            openErrorModalFunc(status[1]);
+                                            openErrorModalFunc(event?.error);
                                         }}>
                                         Error
                                     </Button>
                                 </div>
-                            ) : status[1] === 'warning' ? (
+                            ) : event.hasOwnProperty('warning') ? (
                                 <FlexLayout direction="vertical">
                                     <FlexChild>
                                         <Badge type="Positive-100">
-                                            {status[0]}
+                                            {status}
                                         </Badge>
                                     </FlexChild>
                                     <FlexChild>
@@ -131,7 +174,7 @@ const Dashboard = (_props: DIProps) => {
                                                 type="Plain"
                                                 onClick={() => {
                                                     openWarningModalFunc(
-                                                        status[2]
+                                                        event.warning
                                                     );
                                                 }}>
                                                 Warning
@@ -142,21 +185,21 @@ const Dashboard = (_props: DIProps) => {
                             ) : (
                                 <Badge
                                     type={
-                                        status[0] === 'Paused'
+                                        status === 'PAUSED'
                                             ? 'Warning-200'
-                                            : status[0] === 'Pending'
+                                            : status === 'PENDING'
                                             ? 'Neutral-100-Border'
-                                            : status[0] === 'Scheduled'
+                                            : status === 'SCHEDULED'
                                             ? 'Positive-100'
-                                            : status[0] === 'Active'
+                                            : status === 'ACTIVE'
                                             ? 'Positive-200'
-                                            : status[0] === 'Archived'
+                                            : status === 'ARCHIVED'
                                             ? 'Info-100'
-                                            : status[0] === 'Disconnected'
+                                            : status === 'DISCONNECTED'
                                             ? 'Neutral-100'
                                             : 'Neutral-200'
                                     }>
-                                    {status[0]}
+                                    {status.toLowerCase()}
                                 </Badge>
                             )}
                         </>
@@ -191,15 +234,15 @@ const Dashboard = (_props: DIProps) => {
 
     const openWarningModalFunc = (error: any) => {
         setWarningModal(true);
-        openModalFunc(error);
+        errorWarningModalFunc(error);
     };
 
     const openErrorModalFunc = (error: any) => {
         setErrorModal(true);
-        openModalFunc(error);
+        errorWarningModalFunc(error);
     };
 
-    const openModalFunc = (error: any) => {
+    const errorWarningModalFunc = (error: any) => {
         setErrorArray(error);
         const errorPayload = error.map((item: any) => ({
             title: item.title,
@@ -216,16 +259,18 @@ const Dashboard = (_props: DIProps) => {
             .finally(() => setLoadingErrorModal(false));
     };
 
-    const facebookShopId = _props.redux.current?.target?._id;
-
-    let staticParams = {
-        shop_id: facebookShopId,
-        'filter[shop_id]': facebookShopId,
-        activePage: 1,
-        count: 5,
-    };
-
     const localParams: any = _props.di.globalState.get('campaign_params');
+
+    const [search, setSearch] = useState('');
+    const [searchLoading, setSearchLoading] = useState(false);
+    const [searchOptions, setSearchOptions] = useState<
+        SearchOptionsInterface[]
+    >([
+        {
+            label: '',
+            value: '',
+        },
+    ]);
 
     const [selectedFilter, setSelectedFilter] = useState<String[]>([]);
     const [enableApplyFilter, setEnableApplyFilter] = useState(false);
@@ -378,8 +423,65 @@ const Dashboard = (_props: DIProps) => {
         setAddManageColumns([...extraCol]);
         updateGridColumn(tempCol);
     };
+    const timer = useRef<any>();
 
-    const data: DataTypeI[] = StaticGridData;
+    useEffect(() => {
+        clearTimeout(timer.current);
+        let searchUrl = `${environment.API_ENDPOINT}${
+            get.getCampaignsAutoCompleteUrl
+        }?shop_id=${facebookShopId}&keyword=${encodeURIComponent(search)}`;
+        setSearchLoading(true);
+        timer.current = setTimeout(() => {
+            if (search) {
+                fetch(searchUrl, {
+                    method: 'GET',
+                    headers: prepareheaders(_props.redux),
+                })
+                    .then((res) => res.json())
+                    .then((response) => {
+                        const { success, data } = response;
+                        console.log(response);
+                        if (success) {
+                            setSearchOptions(
+                                data?.map(
+                                    ({ campaign_name, campaign_id }: any) => ({
+                                        label: campaign_name,
+                                        value: campaign_name,
+                                        id: campaign_id,
+                                    })
+                                )
+                            );
+                        }
+                    })
+                    .finally(() => {
+                        setSearchLoading(false);
+                    });
+            }
+        }, 800);
+    }, [search]);
+
+    const handleSearchFunc = (e: string) => {
+        setSearch(e);
+    };
+
+    const handleSearchClick = (e: string, id: number) => {
+        let tempParams = { ...params };
+        tempParams['filter[campaign_id]'] = id;
+        setParams({ ...tempParams });
+        getCampaignFunc(get.getCampaignsUrl, tempParams);
+    };
+
+    const searchClearFunc = () => {
+        setSearch('');
+        let tempParams = { ...params };
+        delete tempParams['filter[campaign_id]'];
+        setParams({ ...tempParams });
+        // getCampaignFunc(get.getCampaignsUrl, tempParams);
+        setGridData(StaticGridData);
+    };
+
+    // const data: DataTypeI[] = StaticGridData;
+    const data: DataTypeI[] = gridData;
     return (
         <>
             <PageHeader
@@ -387,7 +489,9 @@ const Dashboard = (_props: DIProps) => {
                 action={
                     <FlexLayout spacing="loose" wrap="noWrap">
                         <Button
-                            onClick={function noRefCheck() {}}
+                            onClick={() =>
+                                history(`/panel/${match.uId}/dashboard/create`)
+                            }
                             type="Primary"
                             icon={<Plus color="#fff" size={16} />}
                             iconRound={false}>
@@ -474,23 +578,21 @@ const Dashboard = (_props: DIProps) => {
                         mobileWidth="100"
                         tabWidth="50">
                         <AutoComplete
+                            loading={searchLoading}
                             clearButton
-                            clearFunction={function noRefCheck() {}}
+                            clearFunction={() => searchClearFunc()}
                             extraClass=""
-                            onChange={function noRefCheck() {}}
-                            onClick={function noRefCheck() {}}
-                            onEnter={function noRefCheck() {}}
-                            options={[
-                                {
-                                    label: 'Sloane',
-                                    value: 'Sloane',
-                                },
-                            ]}
+                            onChange={(e: string) => handleSearchFunc(e)}
+                            onClick={(e: string, id: number) =>
+                                handleSearchClick(e, id)
+                            }
+                            onEnter={(e: string) => handleSearchFunc(e)}
+                            options={searchOptions}
                             placeHolder="Search Campaigns"
                             popoverPosition="left"
                             setHiglighted
                             thickness="thick"
-                            value=""
+                            value={search}
                         />
                     </FlexChild>
                     <FlexChild

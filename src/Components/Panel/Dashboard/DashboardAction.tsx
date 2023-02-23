@@ -4,16 +4,12 @@ import {
     Modal,
     Popover,
     TextStyles,
-    Toast,
-    ToastWrapper,
 } from '@cedcommerce/ounce-ui';
 import './dashboardStyle.css';
 import React, { useState } from 'react';
 import { MoreVertical } from 'react-feather';
-
 import { DI, DIProps } from '../../../Core';
 import { urlFetchCalls } from '../../../Constant';
-import { Facebook, Instagram } from '../Settings/svgs/Svgs';
 import { getPlacement } from './Functions';
 interface ActionI extends DIProps {
     action: any;
@@ -62,6 +58,7 @@ const DashboardAction = (_props: ActionI) => {
 
             PUT(url, params).then((result) => {
                 const { success, message } = result;
+                console.log(result);
                 if (!success) {
                     _props.error(message);
                 } else {
@@ -82,8 +79,8 @@ const DashboardAction = (_props: ActionI) => {
                     <Button
                         length="fullBtn"
                         disable={
-                            action.status[0] === 'Disconnected' ||
-                            action.status[0] === 'Archived'
+                            action.status === 'DISCONNECTED' ||
+                            action.status === 'ARCHIVED'
                         }
                         icon={<MoreVertical />}
                         type="Plain"
@@ -95,14 +92,14 @@ const DashboardAction = (_props: ActionI) => {
                     <Button type="Plain" onClick={() => ModalFunc('Archive')}>
                         Archive
                     </Button>
-                    {action.status[0] === 'Paused' ? (
+                    {action.status === 'PAUSED' ? (
                         <Button
                             type="Plain"
                             onClick={() => ModalFunc('Unpause')}>
                             Unpause
                         </Button>
-                    ) : action.status[0] === 'Scheduled' ||
-                      action.status[0] === 'Active' ? (
+                    ) : action.status === 'SCHEDULED' ||
+                      action.status === 'ACTIVE' ? (
                         <Button type="Plain" onClick={() => ModalFunc('Pause')}>
                             Pause
                         </Button>

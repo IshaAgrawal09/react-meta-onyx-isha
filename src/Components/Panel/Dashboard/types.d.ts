@@ -16,6 +16,11 @@ export interface DataTypeI {
     roas?: number;
     shop_id?: string;
 }
+
+interface SearchOptionsInterface {
+    label: string;
+    value: string;
+}
 export interface ParamsInterface {
     shop_id: number;
     'filter[shop_id]': number;

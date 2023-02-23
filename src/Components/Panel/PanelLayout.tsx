@@ -18,6 +18,7 @@ import Logo from '../../Asests/Images/svg/Logo';
 import MobileLogo from '../../Asests/Images/svg/MobileLogo';
 import { DI, DIProps } from '../../Core';
 import Footer from '../Footer/Footer';
+import CreateCampaign from './CreateCampaign';
 import Dashboard from './Dashboard';
 import FirstCampaign from './Dashboard/FirstCampaign';
 import Faq from './Faq';
@@ -68,6 +69,7 @@ const PanelLayout = (props: DIProps): JSX.Element => {
                 <Route path="help" element={<Help />} />
                 <Route path="faq" element={<Faq />} />
                 <Route path="product" element={<Product />} />
+                <Route path="dashboard/create" element={<CreateCampaign />} />
                 <Route path="dashboard" element={<Dashboard />} />
             </Routes>
         );
