@@ -7,8 +7,9 @@ import {
 } from '@cedcommerce/ounce-ui';
 import React, { useState } from 'react';
 import { CheckCircle } from 'react-feather';
+import { placementI } from '../create';
 
-const Placement = () => {
+const Placement = (_props: placementI) => {
     const [placementData, setPlacementData] = useState<String[]>(['facebook']);
 
     const placementFunc = (value: string) => {
@@ -33,7 +34,7 @@ const Placement = () => {
                 style={{ display: 'block' }}
             />
             <FlexChild>
-                <>
+                <FlexLayout spacing="loose" direction="vertical">
                     <TextStyles
                         alignment="left"
                         fontweight="extraBold"
@@ -44,47 +45,40 @@ const Placement = () => {
                         utility="none">
                         Placements
                     </TextStyles>
-                    <div className="mt-10 mb-10">
-                        <TextStyles>
-                            You can select Facebook, Instagram, or both to place
-                            your Ads. Please note that if you select both, the
-                            Ads placement gets distributed between the two
-                            platforms based on the Ad strength.
-                        </TextStyles>
-                        {placementData.length === 0 ? (
-                            <div className="mt-10 mb-10">
-                                <Alert
-                                    destroy={false}
-                                    onClose={function noRefCheck() {}}
-                                    type="warning">
-                                    Atleast one platform should be selected.
-                                </Alert>
-                            </div>
-                        ) : null}
 
-                        <div className="mt-10">
-                            <FlexLayout
-                                spacing="tight"
-                                direction="vertical"
-                                wrap="noWrap">
-                                <CheckBox
-                                    key={'facebookCheck'}
-                                    checked={placementData.includes('facebook')}
-                                    labelVal="Facebook"
-                                    onClick={() => placementFunc('facebook')}
-                                />
-                                <CheckBox
-                                    key={'instagramCheck'}
-                                    checked={placementData.includes(
-                                        'instagram'
-                                    )}
-                                    labelVal="Instagram"
-                                    onClick={() => placementFunc('instagram')}
-                                />
-                            </FlexLayout>
-                        </div>
-                    </div>
-                </>
+                    <TextStyles>
+                        You can select Facebook, Instagram, or both to place
+                        your Ads. Please note that if you select both, the Ads
+                        placement gets distributed between the two platforms
+                        based on the Ad strength.
+                    </TextStyles>
+                    {placementData.length === 0 ? (
+                        <Alert
+                            destroy={false}
+                            onClose={function noRefCheck() {}}
+                            type="warning">
+                            Atleast one platform should be selected.
+                        </Alert>
+                    ) : null}
+
+                    <FlexLayout
+                        spacing="tight"
+                        direction="vertical"
+                        wrap="noWrap">
+                        <CheckBox
+                            key={'facebookCheck'}
+                            checked={placementData.includes('facebook')}
+                            labelVal="Facebook"
+                            onClick={() => placementFunc('facebook')}
+                        />
+                        <CheckBox
+                            key={'instagramCheck'}
+                            checked={placementData.includes('instagram')}
+                            labelVal="Instagram"
+                            onClick={() => placementFunc('instagram')}
+                        />
+                    </FlexLayout>
+                </FlexLayout>
             </FlexChild>
         </FlexLayout>
     );

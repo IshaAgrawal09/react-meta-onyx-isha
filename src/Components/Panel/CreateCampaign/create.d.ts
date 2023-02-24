@@ -7,3 +7,13 @@ export interface campaignFormI {
 export interface campaignProductsI {
     product_count: number;
 }
+
+export interface audienceI {
+    audienceData: any;
+    setAudienceData: any;
+}
+
+export interface placementI {
+    placement: string[];
+    setPlacement: any;
+}

@@ -20,7 +20,7 @@ const CampaignProducts = (_props: campaignProductsI) => {
                     style={{ display: 'block' }}
                 />
                 <FlexChild>
-                    <>
+                    <FlexLayout spacing="loose" direction="vertical">
                         <TextStyles
                             alignment="left"
                             fontweight="extraBold"
@@ -31,22 +31,22 @@ const CampaignProducts = (_props: campaignProductsI) => {
                             utility="none">
                             Buy with Prime-eligible Products
                         </TextStyles>
-                        <div className="mt-10 mb-10">
-                            <TextStyles textcolor="light">
-                                Make sure your product catalog is synced with
-                                the app so that Facebook can select the most
-                                suitable products to advertise.
-                                <Button
-                                    type="TextButton"
-                                    onClick={() => {
-                                        window.open(
-                                            `http://${window.location.host}/info/faq?query=How does the Catalog Sync process work?`
-                                        );
-                                    }}>
-                                    Learn more about the Catalog Sync process.
-                                </Button>
-                            </TextStyles>
-                        </div>
+
+                        <TextStyles textcolor="light">
+                            Make sure your product catalog is synced with the
+                            app so that Facebook can select the most suitable
+                            products to advertise.
+                            <Button
+                                type="TextButton"
+                                onClick={() => {
+                                    window.open(
+                                        `http://${window.location.host}/info/faq?query=How does the Catalog Sync process work?`
+                                    );
+                                }}>
+                                Learn more about the Catalog Sync process.
+                            </Button>
+                        </TextStyles>
+
                         {product_count === 0 ? (
                             <Alert destroy={false} type="warning">
                                 <TextStyles
@@ -69,7 +69,7 @@ const CampaignProducts = (_props: campaignProductsI) => {
                                 </TextStyles>
                             </Alert>
                         )}
-                    </>
+                    </FlexLayout>
                 </FlexChild>
             </FlexLayout>
         </>

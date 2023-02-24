@@ -153,7 +153,7 @@ const CampaignForm = (_props: campaignFormI) => {
                                 setFormData({ ...formData, daily_budget: e });
                             }}
                             onblur={() => {
-                                if (/[^0-9]/.test(formData.daily_budget)) {
+                                if (!/[^0-9]/.test(formData.daily_budget)) {
                                     if (formData.daily_budget < 5) {
                                         setErrorValidation({
                                             ...errorValidation,

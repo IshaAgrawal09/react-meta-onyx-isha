@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 import { urlFetchCalls } from '../../../Constant';
 import { DI, DIProps } from '../../../Core';
 import CampaignForm from './CampaignForm';
+import Audience from './Components/Audience/Audience';
 import CampaignProducts from './Components/CampaignProducts';
 import Placement from './Components/Placement';
 import TargetLocation from './Components/TargetLocation';
@@ -29,6 +30,15 @@ const CreateCampaign = (_props: DIProps) => {
         daily_budget: '',
         adText: '',
     });
+
+    const [audienceData, setAudienceData] = useState({
+        gender: '0',
+        max_age: '65+',
+        min_age: '18',
+        groups: [],
+    });
+
+    const [placement, setPlacement] = useState([]);
 
     const initCampaignParams = {
         shop_id: facebookShopId,
@@ -53,11 +63,31 @@ const CreateCampaign = (_props: DIProps) => {
             start_date !== '' &&
             adText !== '' &&
             name.length < 395 &&
-            daily_budget > '4'
+            Number(daily_budget) > 4
         ) {
             valid = true;
         }
         return valid;
+    };
+
+    let createParams = {
+        call_to_action: 'SHOP_NOW',
+        form_token: data?.form_token,
+        locations: [
+            {
+                key: 'US',
+                name: 'United States',
+                type: 'country',
+                country_code: 'US',
+                country_name: 'United States',
+                supports_region: true,
+                supports_city: true,
+            },
+        ],
+        shop_id: 1031,
+        status: 'ACTIVE',
+        type: 'basic',
+        website_url: 'https://www.amazon.com',
     };
 
     return (
@@ -87,7 +117,15 @@ const CreateCampaign = (_props: DIProps) => {
                         <hr />
                         <TargetLocation />
                         <hr />
-                        <Placement />
+                        <Audience
+                            audienceData={audienceData}
+                            setAudienceData={setAudienceData}
+                        />
+                        <hr />
+                        <Placement
+                            placement={placement}
+                            setPlacement={setPlacement}
+                        />
                         <hr />
                         <FlexLayout spacing="loose" halign="end">
                             <Button

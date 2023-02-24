@@ -15,8 +15,8 @@ const TargetLocation = () => {
                 size="20"
                 style={{ display: 'block' }}
             />
-            <FlexChild>
-                <>
+            <FlexChild desktopWidth="100">
+                <FlexLayout spacing="loose" direction="vertical">
                     <TextStyles
                         alignment="left"
                         fontweight="extraBold"
@@ -27,7 +27,10 @@ const TargetLocation = () => {
                         utility="none">
                         Target Location
                     </TextStyles>
-                    <div className="mt-10">
+                    <FlexChild
+                        desktopWidth="100"
+                        tabWidth="100"
+                        mobileWidth="100">
                         <Alert destroy={false} type="info">
                             <TextStyles
                                 textcolor="dark"
@@ -40,8 +43,8 @@ const TargetLocation = () => {
                                 United States
                             </TextStyles>
                         </Alert>
-                    </div>
-                </>
+                    </FlexChild>
+                </FlexLayout>
             </FlexChild>
         </FlexLayout>
     );
