@@ -5,12 +5,17 @@ import {
     FlexLayout,
     TextStyles,
 } from '@cedcommerce/ounce-ui';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CheckCircle } from 'react-feather';
 import { placementI } from '../create';
 
 const Placement = (_props: placementI) => {
-    const [placementData, setPlacementData] = useState<String[]>(['facebook']);
+    const { placement, fillData, setFillData } = _props;
+    const [placementData, setPlacementData] = useState<String[]>([]);
+
+    useEffect(() => {
+        setPlacementData([...placement.placements]);
+    }, [placement]);
 
     const placementFunc = (value: string) => {
         if (placementData.includes(value)) {
@@ -21,7 +26,10 @@ const Placement = (_props: placementI) => {
                 return item;
             });
             setPlacementData([...update]);
+            if (update.length == 0)
+                setFillData({ ...fillData, placement: false });
         } else {
+            setFillData({ ...fillData, placement: true });
             setPlacementData([...placementData, value]);
         }
     };

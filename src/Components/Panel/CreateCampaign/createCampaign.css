@@ -1,0 +1,148 @@
+.disable-campaign {
+  opacity: 0.4;
+  z-index: 999;
+  cursor: none;
+  pointer-events: none;
+  
+}
+
+.preview .slick-list{
+  max-width: 400px;
+  max-height: 400px;
+}
+
+
+.custom_slider-items {
+  padding: 10px;
+}
+
+.custom_slider-item {
+  padding: 0;
+  border: 1px solid #D7D9DB;
+}
+
+.custom_slider-item .inte-Card--Media {
+  margin: 0;
+  width: 100%;
+}
+
+.custom_slider-item .inte-card__Body {
+  border-top: 1px solid #D7D9DB;
+  padding: 10px;
+  background: #F6F6F6;
+}
+
+.custom_shop_now button.inte-btn span {
+  display: block;
+}
+
+.custom_shop_now button.inte-btn {
+  display: inline-block;
+}
+
+.custom_shop_now {
+  text-align: right;
+}
+
+/* .instagram-preview--wrapper .slick-list {
+  padding: unset !important;
+}
+
+.instagram-preview--wrapper ul.slick-dots {
+  margin-top: 13px;
+  position: static;
+  margin-left: auto;
+  margin-right: auto;
+  transform: unset;
+}
+
+.instagram-preview--wrapper ul.slick-dots li {
+  width: 10px !important;
+  height: 10px !important;
+  background: var(--inte-B30);
+  border-radius: 100%;
+}
+
+.instagram-preview--wrapper ul.slick-dots li.slick-active {
+  background-color: var(--inte-B60);
+}
+
+.instagram-preview--wrapper ul.slick-dots li button {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: transparent !important;
+  overflow: hidden;
+  text-indent: -100px;
+} */
+
+.facebook_preview_c .slick-list {
+  padding: 0 10% 0 0 !important;
+}
+
+.facebook_preview_c .preview_data-content .inte-flex__item--D66 {
+  flex: 0 0 calc(100% - 104px);
+  max-width: calc(100% - 104px);
+}
+
+.facebook_preview_c .preview_data-content .inte-flex__item--D33 {
+  flex: 0 0 104px;
+  max-width: 104px;
+  padding-left: 0;
+}
+
+.custom_slider-items .preview-card--title {
+  position: relative;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 45px;
+}
+
+.custom_slider-items.instagram-preview .inte-card__Body {
+  padding: 0 !important;
+  border-top-color: #e7e3e347;
+}
+
+.custom_slider-items.instagram-preview .inte-card__Body button.inte-btn {
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+  padding-right: 5px;
+  background: #fff;
+  border-radius: 0;
+}
+
+.custom_slider-items.instagram-preview .inte-card__Body button.inte-btn:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.custom_slider-items.instagram-preview .inte-card.inte-card--default {
+  border-radius: 0;
+  border-color: #e7e3e347;
+  box-shadow: 0px 0px 7px 3px #e7e3e347;
+}
+
+@media only screen and (max-width: 1450px) and (min-width: 1200px) {
+  .custom_shop_now {
+    text-align: left;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .facebook_preview_c .preview_data-content .inte-flex__item--D33 {
+    flex: 0 0 120px;
+    max-width: 120px;
+    padding-left: 1.6rem;
+  }
+
+  .facebook_preview_c .preview_data-content .inte-flex__item--D66 {
+    flex: 0 0 calc(100% - 120px);
+    max-width: calc(100% - 120px);
+}
+
+  .custom_shop_now {
+    text-align: left;
+  }
+}

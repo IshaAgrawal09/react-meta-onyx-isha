@@ -35,16 +35,11 @@ const PanelLayout = (props: DIProps): JSX.Element => {
     const dispatcher = useContext(StoreDispatcher);
 
     const onChangeHandle = (e: any) => {
-        console.log(e, 'onChange');
         if (e.path === 'logout') setOpenModalLogout(true);
-        else if (e.path.includes('https:')) window.open(e.path);
-        else {
-            props.history(e.path);
-        }
+        else props.history(e.path);
     };
     const getCurrentPath = (path: string) => {
         const newpAth = '/' + path.split('/')[1] + '/' + path.split('/')[3];
-        console.log(newpAth);
         return path;
     };
 
@@ -70,6 +65,7 @@ const PanelLayout = (props: DIProps): JSX.Element => {
                 <Route path="faq" element={<Faq />} />
                 <Route path="product" element={<Product />} />
                 <Route path="dashboard/create" element={<CreateCampaign />} />
+                <Route path="camp/:CId/edit" element={<CreateCampaign />} />
                 <Route path="dashboard" element={<Dashboard />} />
             </Routes>
         );

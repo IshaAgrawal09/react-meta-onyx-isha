@@ -11,6 +11,7 @@ import { MoreVertical } from 'react-feather';
 import { DI, DIProps } from '../../../Core';
 import { urlFetchCalls } from '../../../Constant';
 import { getPlacement } from './Functions';
+import { useParams } from 'react-router-dom';
 interface ActionI extends DIProps {
     action: any;
 }
@@ -19,7 +20,9 @@ const DashboardAction = (_props: ActionI) => {
     const {
         action,
         di: { PUT, DELETE },
+        history,
     } = _props;
+    const match = useParams();
     const { put, delete: del } = urlFetchCalls;
     const [openActionModal, setOpenActionModal] = useState(false);
 
@@ -70,6 +73,12 @@ const DashboardAction = (_props: ActionI) => {
         setOpenModal(false);
     };
 
+    const editInfo = (e: any) => {
+        const id = e.campaign_id;
+        _props.di.globalState.set('editCampaignId', JSON.stringify(true));
+        history(`/panel/${match.uId}/camp/${id}/edit`);
+    };
+
     return (
         <>
             <Popover
@@ -88,7 +97,9 @@ const DashboardAction = (_props: ActionI) => {
                         onClick={() => openAction()}></Button>
                 }>
                 <FlexLayout direction="vertical">
-                    <Button type="Plain">Edit</Button>
+                    <Button type="Plain" onClick={() => editInfo(action)}>
+                        Edit
+                    </Button>
                     <Button type="Plain" onClick={() => ModalFunc('Archive')}>
                         Archive
                     </Button>
