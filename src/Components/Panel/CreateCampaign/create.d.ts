@@ -13,16 +13,13 @@ export interface campaignDataI {
 }
 
 export interface campaignFormI {
-    formData: campaignDataI;
-    setFormData: (val: any) => void;
-    fillData: {
-        campaign_details: boolean;
-        products: boolean;
-        location: boolean;
-        audience: boolean;
-        placement: boolean;
-    };
-    setFillData: (val: any) => void;
+    editFormData: campaignDataI;
+    updateChanges: (
+        flag: boolean,
+        change: boolean,
+        code: string,
+        value: any
+    ) => void;
 }
 
 export interface campaignProductsI {
@@ -30,29 +27,25 @@ export interface campaignProductsI {
 }
 
 export interface audienceI {
-    audienceData: campaignDataI;
+    editAudienceData: campaignDataI;
     setAudienceData: (val: any) => void;
-    fillData: {
-        campaign_details: boolean;
-        products: boolean;
-        location: boolean;
-        audience: boolean;
-        placement: boolean;
-    };
-    setFillData: (val: any) => void;
+    retargeting: any;
+    updateChanges: (
+        flag: boolean,
+        change: boolean,
+        code: string,
+        value: any
+    ) => void;
 }
 
 export interface placementI {
-    placement: campaignDataI;
-    setPlacement: (val: any) => void;
-    fillData: {
-        campaign_details: boolean;
-        products: boolean;
-        location: boolean;
-        audience: boolean;
-        placement: boolean;
-    };
-    setFillData: (val: any) => void;
+    editPlacementData: any;
+    updateChanges: (
+        flag: boolean,
+        change: boolean,
+        code: string,
+        value: any
+    ) => void;
 }
 
 export interface previewI extends DIProps {

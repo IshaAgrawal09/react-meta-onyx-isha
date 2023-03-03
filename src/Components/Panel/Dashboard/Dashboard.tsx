@@ -1,46 +1,33 @@
 import {
     AdvanceFilter,
-    AutoComplete,
     Badge,
     Button,
     Card,
     CheckBox,
     FlexChild,
     FlexLayout,
-    PageHeader,
+    Loader,
     Pagination,
     Popover,
-    Skeleton,
     TextStyles,
     ToolTip,
 } from '@cedcommerce/ounce-ui';
 
 import Table, { ColumnsType } from 'antd/es/table';
 import React, { useEffect, useRef, useState } from 'react';
-import {
-    AlertOctagon,
-    AlertTriangle,
-    Download,
-    Filter,
-    Plus,
-} from 'react-feather';
-import {
-    DataTypeI,
-    ParamsInterface,
-    gridData,
-    showColumns,
-    SearchOptionsInterface,
-} from './types';
+import { AlertOctagon, AlertTriangle, Filter, Plus } from 'react-feather';
+import { DataTypeI, gridData, showColumns } from './types';
 import './dashboardStyle.css';
 import { gridTooltip, urlFetchCalls } from '../../../Constant';
 import { DI, DIProps } from '../../../Core';
 import DashboardAction from './DashboardAction';
-import { createUrl, getPlacement } from './Functions';
-import DashboardBanner from './DashboardBanner';
+import { getPlacement } from './Functions';
 import { ErrorModal, WarningModal } from './GridModal';
-import { prepareheaders } from '../../../Services';
-import { useParams } from 'react-router-dom';
 import { StaticGridData } from './StaticData';
+import FirstCampaign from './FirstCampaign';
+import DashboardHeader from './DashboardHeader';
+import GridHeader from './GridHeader';
+import GridAddOptions from './GridAddOptions';
 
 export interface gridParamsI {
     shop_id: number;
@@ -55,12 +42,18 @@ export interface gridParamsI {
 
 const Dashboard = (_props: DIProps) => {
     const {
-        di: { globalState, GET, POST, environment },
-        history,
+        di: { GET, POST },
     } = _props;
-    const match = useParams();
 
+    const facebookShopId = _props.redux.current?.target?._id;
     const { get, post } = urlFetchCalls;
+
+    let staticParams = {
+        shop_id: facebookShopId,
+        'filter[shop_id]': facebookShopId,
+        activePage: 1,
+        count: 5,
+    };
     const [showColumns, setShowColumns] = useState<showColumns>({
         campaign_name: true,
         status: true,
@@ -80,32 +73,31 @@ const Dashboard = (_props: DIProps) => {
     const [sorting, setSorting] = useState();
     const [gridColumn, setGridColumn] = useState<ColumnsType<DataTypeI>>([]);
     const [gridData, setGridData] = useState<any>(StaticGridData);
-
-    const facebookShopId = _props.redux.current?.target?._id;
-
-    let staticParams = {
-        shop_id: facebookShopId,
-        'filter[shop_id]': facebookShopId,
-        activePage: 1,
-        count: 5,
-    };
-
+    const [gridLoading, setGridLoading] = useState<boolean>(false);
     const [params, setParams] = useState<gridParamsI>(staticParams);
 
     useEffect(() => {
         updateGridColumn(showColumns);
+        if (
+            _props.di.globalState.get('showPaymentBanner') == null ||
+            _props.di.globalState.get('showInstaBanner') == null
+        )
+            initCampaign(get.initCampaignUrl);
         // getCampaignFunc(get.getCampaignsUrl, params);
     }, []);
 
     const getCampaignFunc = (url: string, params: any) => {
-        console.log('call');
-        GET(url, { ...params }).then((result) => {
-            const { success, data } = result;
-            if (success) {
-                console.log(data.rows, 'grid');
-                setGridData(data.rows);
-            }
-        });
+        setGridLoading(true);
+        GET(url, { ...params })
+            .then((result) => {
+                const { success, data } = result;
+                if (success) {
+                    setGridData(data.rows);
+                }
+            })
+            .finally(() => {
+                setGridLoading(false);
+            });
     };
 
     const updateGridColumn = (col: any) => {
@@ -261,17 +253,6 @@ const Dashboard = (_props: DIProps) => {
 
     const localParams: any = _props.di.globalState.get('campaign_params');
 
-    const [search, setSearch] = useState('');
-    const [searchLoading, setSearchLoading] = useState(false);
-    const [searchOptions, setSearchOptions] = useState<
-        SearchOptionsInterface[]
-    >([
-        {
-            label: '',
-            value: '',
-        },
-    ]);
-
     const [selectedFilter, setSelectedFilter] = useState<String[]>([]);
     const [enableApplyFilter, setEnableApplyFilter] = useState(false);
     const [resetFilter, setResetFilter] = useState(false);
@@ -280,17 +261,7 @@ const Dashboard = (_props: DIProps) => {
     const [openManageColumns, setOpenManageColumns] = useState(false);
     const [addManageColumns, setAddManageColumns] = useState<String[]>([]);
 
-    const [downloadCSVparams, setdDownloadCSVParams] =
-        useState<ParamsInterface>(staticParams);
     const [initLoading, setInitLoading] = useState(false);
-
-    useEffect(() => {
-        if (
-            _props.di.globalState.get('showPaymentBanner') == null ||
-            _props.di.globalState.get('showInstaBanner') == null
-        )
-            initCampaign(get.initCampaignUrl);
-    }, []);
 
     const initCampaignParams = {
         shop_id: facebookShopId,
@@ -303,26 +274,23 @@ const Dashboard = (_props: DIProps) => {
             .then((result) => {
                 const { success, data } = result;
                 if (success) {
-                    if (data.payment_setup === false) {
-                        if (
-                            _props.di.globalState.get('showPaymentBanner') ==
-                            null
-                        ) {
-                            _props.di.globalState.set(
-                                'showPaymentBanner',
-                                JSON.stringify(true)
-                            );
-                        }
+                    if (
+                        data.payment_setup === false &&
+                        _props.di.globalState.get('showPaymentBanner') == null
+                    ) {
+                        _props.di.globalState.set(
+                            'showPaymentBanner',
+                            JSON.stringify(true)
+                        );
                     }
-                    if (data.is_instagram_connected === false) {
-                        if (
-                            _props.di.globalState.get('showInstaBanner') == null
-                        ) {
-                            _props.di.globalState.set(
-                                'showInstaBanner',
-                                JSON.stringify(true)
-                            );
-                        }
+                    if (
+                        data.is_instagram_connected === false &&
+                        _props.di.globalState.get('showInstaBanner') == null
+                    ) {
+                        _props.di.globalState.set(
+                            'showInstaBanner',
+                            JSON.stringify(true)
+                        );
                     }
                 }
             })
@@ -334,12 +302,6 @@ const Dashboard = (_props: DIProps) => {
     if (localParams != null) {
         staticParams = JSON.parse(localParams);
     }
-
-    const endPoint: string = `${environment.API_ENDPOINT}${
-        get.bulkExportCSV
-    }?shop_id=${facebookShopId}&bearer=${globalState.getBearerToken()}`;
-
-    const downloadCsvUrl = createUrl(endPoint, downloadCSVparams);
 
     const statusFiltersAvailable = [
         'Archived',
@@ -425,308 +387,182 @@ const Dashboard = (_props: DIProps) => {
     };
     const timer = useRef<any>();
 
-    useEffect(() => {
-        clearTimeout(timer.current);
-        let searchUrl = `${environment.API_ENDPOINT}${
-            get.getCampaignsAutoCompleteUrl
-        }?shop_id=${facebookShopId}&keyword=${encodeURIComponent(search)}`;
-        setSearchLoading(true);
-        timer.current = setTimeout(() => {
-            if (search) {
-                fetch(searchUrl, {
-                    method: 'GET',
-                    headers: prepareheaders(_props.redux),
-                })
-                    .then((res) => res.json())
-                    .then((response) => {
-                        const { success, data } = response;
-                        console.log(response);
-                        if (success) {
-                            setSearchOptions(
-                                data?.map(
-                                    ({ campaign_name, campaign_id }: any) => ({
-                                        label: campaign_name,
-                                        value: campaign_name,
-                                        id: campaign_id,
-                                    })
-                                )
-                            );
-                        }
-                    })
-                    .finally(() => {
-                        setSearchLoading(false);
-                    });
-            }
-        }, 800);
-    }, [search]);
-
-    const handleSearchFunc = (e: string) => {
-        setSearch(e);
-    };
-
-    const handleSearchClick = (e: string, id: number) => {
-        let tempParams = { ...params };
-        tempParams['filter[campaign_id]'] = id;
-        setParams({ ...tempParams });
-        getCampaignFunc(get.getCampaignsUrl, tempParams);
-    };
-
-    const searchClearFunc = () => {
-        setSearch('');
-        let tempParams = { ...params };
-        delete tempParams['filter[campaign_id]'];
-        setParams({ ...tempParams });
-        // getCampaignFunc(get.getCampaignsUrl, tempParams);
-        setGridData(StaticGridData);
-    };
-
-    // const data: DataTypeI[] = StaticGridData;
     const data: DataTypeI[] = gridData;
     return (
         <>
-            <PageHeader
-                title="Welcome to Social Ads for Buy with Prime!"
-                action={
-                    <FlexLayout spacing="loose" wrap="noWrap">
-                        <Button
-                            onClick={() =>
-                                history(`/panel/${match.uId}/dashboard/create`)
-                            }
-                            type="Primary"
-                            icon={<Plus color="#fff" size={16} />}
-                            iconRound={false}>
-                            Create Campaign
-                        </Button>
-                    </FlexLayout>
-                }
-                description="Create and manage all your Buy with Prime Facebook and Instagram campaigns here."
-            />
-
-            {/* PAYMENT & INSTAGRAM BANNER  */}
-            {initLoading ? (
-                <Skeleton height="50px" line={3} type="line" width="50px" />
-            ) : _props.di.globalState.get('showPaymentBanner') == 'true' ||
-              _props.di.globalState.get('showInstaBanner') == 'true' ? (
-                <DashboardBanner />
-            ) : null}
-
-            <Card>
-                <FlexLayout halign="fill" valign="center">
-                    <ToolTip
-                        popoverContainer="element"
-                        open={false}
-                        position="right"
-                        helpText={
-                            <div className="custom-tooltip--msg">
-                                <TextStyles
-                                    alignment="left"
-                                    fontweight="normal"
-                                    paragraphTypes="SM-1.3"
-                                    subheadingTypes="XS-1.6"
-                                    textcolor="light"
-                                    type="Paragraph"
-                                    utility="none">
-                                    Campaign Reports are auto synced every hour.
-                                </TextStyles>
-                            </div>
-                        }
-                        type="light">
-                        <div style={{ borderBottom: '1px dashed black' }}>
-                            <TextStyles
-                                fontweight="extraBold"
-                                subheadingTypes="SM-1.8"
-                                type="SubHeading">
-                                Campaigns
-                            </TextStyles>
-                        </div>
-                    </ToolTip>
-                    <div className="table-head-tootip">
-                        <ToolTip
-                            position="left"
-                            popoverContainer="element"
-                            extraClass="download_csv"
-                            open={false}
-                            helpText={
-                                <div className="custom-tooltip--msg">
-                                    <TextStyles>
-                                        If you want to download reports for
-                                        specific campaigns, make sure you apply
-                                        the required filters, then click on
-                                        download report. Else, for a general
-                                        report of all the campaigns. First,
-                                        ensure no filters are selected before
-                                        you download the report.
-                                    </TextStyles>
-                                </div>
-                            }
-                            type="light">
-                            <div className="download_tooltip-btn">
-                                <Button
-                                    type="Outlined"
-                                    icon={<Download />}
-                                    onClick={() => window.open(downloadCsvUrl)}>
-                                    Download Report
-                                </Button>
-                            </div>
-                        </ToolTip>
-                    </div>
-                </FlexLayout>
-                <hr />
-                <FlexLayout halign="fill" valign="center">
-                    <FlexChild
-                        desktopWidth="50"
-                        mobileWidth="100"
-                        tabWidth="50">
-                        <AutoComplete
-                            loading={searchLoading}
-                            clearButton
-                            clearFunction={() => searchClearFunc()}
-                            extraClass=""
-                            onChange={(e: string) => handleSearchFunc(e)}
-                            onClick={(e: string, id: number) =>
-                                handleSearchClick(e, id)
-                            }
-                            onEnter={(e: string) => handleSearchFunc(e)}
-                            options={searchOptions}
-                            placeHolder="Search Campaigns"
-                            popoverPosition="left"
-                            setHiglighted
-                            thickness="thick"
-                            value={search}
-                        />
-                    </FlexChild>
-                    <FlexChild
-                        desktopWidth="50"
-                        mobileWidth="100"
-                        tabWidth="50">
-                        <FlexLayout
-                            halign="end"
-                            valign="center"
-                            spacing="loose">
-                            <AdvanceFilter
-                                button="Filter"
-                                icon={<Filter color="#2a2a2a" size={16} />}
-                                disableApply={!enableApplyFilter}
-                                filters={[
-                                    {
-                                        children: (
-                                            <FlexLayout
-                                                direction="vertical"
-                                                spacing="loose">
-                                                {statusFiltersAvailable.map(
-                                                    (
-                                                        item: string,
-                                                        index: number
-                                                    ) => {
-                                                        return (
-                                                            <CheckBox
-                                                                labelVal={item}
-                                                                key={index}
-                                                                checked={selectedFilter.includes(
-                                                                    item
-                                                                )}
-                                                                onClick={() =>
-                                                                    checkedFilterFunc(
-                                                                        item
-                                                                    )
-                                                                }
-                                                            />
-                                                        );
-                                                    }
-                                                )}
-                                            </FlexLayout>
-                                        ),
-                                        name: 'Status',
-                                    },
-                                ]}
-                                heading="Filters"
-                                resetFilter={() => resetFilterFunc()}
-                                disableReset={!resetFilter}
-                                onApply={applyFilter}
-                                onClose={() => filterClosedFunc()}
-                                type="Outlined"
-                            />
-                            <Popover
-                                open={openManageColumns}
-                                onClose={() => setOpenManageColumns(false)}
-                                activator={
-                                    <Button
-                                        type="Outlined"
-                                        icon={<Plus />}
-                                        onClick={() =>
-                                            setOpenManageColumns(
-                                                !openManageColumns
-                                            )
-                                        }>
-                                        Manage Columns
-                                    </Button>
-                                }
-                                popoverContainer="body"
-                                popoverWidth={200}>
+            <div>
+                <DashboardHeader
+                    initLoading={initLoading}
+                    gridData={gridData}
+                />
+                {gridData?.length == 0 ? (
+                    <FirstCampaign />
+                ) : (
+                    <Card>
+                        <GridHeader />
+                        <hr />
+                        <FlexLayout halign="fill" valign="center">
+                            <FlexChild
+                                desktopWidth="50"
+                                mobileWidth="100"
+                                tabWidth="50">
+                                <GridAddOptions
+                                    setGridData={setGridData}
+                                    getCampaignFunc={getCampaignFunc}
+                                />
+                            </FlexChild>
+                            <FlexChild
+                                desktopWidth="50"
+                                mobileWidth="100"
+                                tabWidth="50">
                                 <FlexLayout
-                                    spacing="loose"
-                                    direction="vertical">
-                                    {extraColumns.map((item, index) => {
-                                        return (
-                                            <CheckBox
-                                                labelVal={item}
-                                                key={index}
-                                                checked={addManageColumns.includes(
-                                                    item
-                                                )}
+                                    halign="end"
+                                    valign="center"
+                                    spacing="loose">
+                                    <AdvanceFilter
+                                        button="Filter"
+                                        icon={
+                                            <Filter color="#2a2a2a" size={16} />
+                                        }
+                                        disableApply={!enableApplyFilter}
+                                        filters={[
+                                            {
+                                                children: (
+                                                    <FlexLayout
+                                                        direction="vertical"
+                                                        spacing="loose">
+                                                        {statusFiltersAvailable.map(
+                                                            (
+                                                                item: string,
+                                                                index: number
+                                                            ) => {
+                                                                return (
+                                                                    <CheckBox
+                                                                        labelVal={
+                                                                            item
+                                                                        }
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                        checked={selectedFilter.includes(
+                                                                            item
+                                                                        )}
+                                                                        onClick={() =>
+                                                                            checkedFilterFunc(
+                                                                                item
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                );
+                                                            }
+                                                        )}
+                                                    </FlexLayout>
+                                                ),
+                                                name: 'Status',
+                                            },
+                                        ]}
+                                        heading="Filters"
+                                        resetFilter={() => resetFilterFunc()}
+                                        disableReset={!resetFilter}
+                                        onApply={applyFilter}
+                                        onClose={() => filterClosedFunc()}
+                                        type="Outlined"
+                                    />
+                                    <Popover
+                                        open={openManageColumns}
+                                        onClose={() =>
+                                            setOpenManageColumns(false)
+                                        }
+                                        activator={
+                                            <Button
+                                                type="Outlined"
+                                                icon={<Plus />}
                                                 onClick={() =>
-                                                    handleManageColumns(item)
-                                                }
-                                            />
-                                        );
-                                    })}
+                                                    setOpenManageColumns(
+                                                        !openManageColumns
+                                                    )
+                                                }>
+                                                Manage Columns
+                                            </Button>
+                                        }
+                                        popoverContainer="body"
+                                        popoverWidth={200}>
+                                        <FlexLayout
+                                            spacing="loose"
+                                            direction="vertical">
+                                            {extraColumns.map((item, index) => {
+                                                return (
+                                                    <CheckBox
+                                                        labelVal={item}
+                                                        key={index}
+                                                        checked={addManageColumns.includes(
+                                                            item
+                                                        )}
+                                                        onClick={() =>
+                                                            handleManageColumns(
+                                                                item
+                                                            )
+                                                        }
+                                                    />
+                                                );
+                                            })}
+                                        </FlexLayout>
+                                    </Popover>
                                 </FlexLayout>
-                            </Popover>
+                            </FlexChild>
                         </FlexLayout>
-                    </FlexChild>
-                </FlexLayout>
-                <div className="mt-30">
-                    <Table
-                        showSorterTooltip={{ title: null }}
-                        pagination={false}
-                        columns={gridColumn ?? '0'}
-                        dataSource={data}
-                        scroll={{ x: 1300 }}
-                    />
-                    <div className="mt-20">
-                        <Pagination
-                            countPerPage="10"
-                            currentPage={1}
-                            onCountChange={function noRefCheck() {}}
-                            onEnter={function noRefCheck() {}}
-                            onNext={function noRefCheck() {}}
-                            onPrevious={function noRefCheck() {}}
-                            optionPerPage={[
-                                {
-                                    label: '10',
-                                    value: '10',
-                                },
-                            ]}
-                            totalPages={20}
-                            totalitem={200}
-                        />
-                    </div>
-                </div>
-            </Card>
-            <ErrorModal
-                solutions={solutions}
-                errorModal={errorModal}
-                setErrorModal={setErrorModal}
-                loadingErrorModal={loadingErrorModal}
-                errorArray={errorArray}
-            />
-            <WarningModal
-                solutions={solutions}
-                warningModal={warningModal}
-                setWarningModal={setWarningModal}
-                loadingErrorModal={loadingErrorModal}
-                errorArray={errorArray}
-            />
+
+                        <div className="mt-30">
+                            {gridLoading ? (
+                                <Loader type="Loader1" />
+                            ) : (
+                                <>
+                                    <Table
+                                        showSorterTooltip={{ title: null }}
+                                        pagination={false}
+                                        columns={gridColumn ?? '0'}
+                                        dataSource={data}
+                                        scroll={{ x: 1300 }}
+                                    />
+                                    <div className="mt-20">
+                                        <Pagination
+                                            countPerPage="10"
+                                            currentPage={1}
+                                            onCountChange={function noRefCheck() {}}
+                                            onEnter={function noRefCheck() {}}
+                                            onNext={function noRefCheck() {}}
+                                            onPrevious={function noRefCheck() {}}
+                                            optionPerPage={[
+                                                {
+                                                    label: '10',
+                                                    value: '10',
+                                                },
+                                            ]}
+                                            totalPages={20}
+                                            totalitem={200}
+                                        />
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </Card>
+                )}
+
+                <ErrorModal
+                    solutions={solutions}
+                    errorModal={errorModal}
+                    setErrorModal={setErrorModal}
+                    loadingErrorModal={loadingErrorModal}
+                    errorArray={errorArray}
+                />
+                <WarningModal
+                    solutions={solutions}
+                    warningModal={warningModal}
+                    setWarningModal={setWarningModal}
+                    loadingErrorModal={loadingErrorModal}
+                    errorArray={errorArray}
+                />
+            </div>
         </>
     );
 };

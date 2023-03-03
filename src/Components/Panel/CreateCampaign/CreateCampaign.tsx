@@ -4,6 +4,7 @@ import {
     Card,
     FlexChild,
     FlexLayout,
+    Modal,
     PageHeader,
     TextStyles,
 } from '@cedcommerce/ounce-ui';
@@ -27,15 +28,7 @@ const CreateCampaign = (_props: DIProps) => {
     const { get } = urlFetchCalls;
     const facebookShopId = _props.redux.current?.target?._id;
 
-    const [data, setData] = useState<any>();
-
-    const [fillData, setFillData] = useState({
-        campaign_details: false,
-        products: true,
-        location: true,
-        audience: false,
-        placement: true,
-    });
+    const [initData, setInitData] = useState<any>();
 
     const [campaignData, setCampaignData] = useState<campaignDataI>({
         name: '',
@@ -49,6 +42,8 @@ const CreateCampaign = (_props: DIProps) => {
         // groups: [],
         placements: ['facebook'],
     });
+    const [datas, setDatas] = useState<any>({});
+    const [quitLoading, setQuitLoading] = useState(false);
 
     const initCampaignParams = {
         shop_id: facebookShopId,
@@ -95,7 +90,6 @@ const CreateCampaign = (_props: DIProps) => {
                         min_age: '25',
                         placements: ['facebook', 'instagram'],
                     };
-
                     setCampaignData({ ...data });
                 }
             });
@@ -108,22 +102,29 @@ const CreateCampaign = (_props: DIProps) => {
             .then((response) => {
                 const { success, data } = response;
                 if (success) {
-                    setData(data);
+                    setInitData(data);
                 }
             });
     };
 
     const disableButton = () => {
-        let bool = Object.values(fillData).find((item: boolean) => {
-            if (item === false) return true;
-        });
-        if (bool === undefined) return false;
-        else return true;
+        let disable = true;
+        let flag = true;
+        let changes = false;
+        for (let key in datas) {
+            if (!datas[key].flag) flag = false;
+            if (datas[key].changes) changes = true;
+        }
+
+        if (match.CId !== undefined && changes && flag) disable = false;
+        else if (flag && Object.keys(datas).length > 1) disable = false;
+
+        return disable;
     };
 
     let createParams = {
         call_to_action: 'SHOP_NOW',
-        form_token: data?.form_token,
+        form_token: initData?.form_token,
         locations: [
             {
                 key: 'US',
@@ -138,7 +139,18 @@ const CreateCampaign = (_props: DIProps) => {
         shop_id: 1031,
         status: 'ACTIVE',
         type: 'basic',
-        website_url: 'https://www.amazon.com',
+        website_url: initData?.website_url,
+    };
+
+    const updateChanges = (
+        flag: boolean,
+        change: boolean,
+        code: string,
+        value: any
+    ) => {
+        let temp: any = {};
+        temp[code] = { flag: flag, changes: change, code: code, val: value };
+        setDatas({ ...datas, ...temp });
     };
 
     return (
@@ -149,7 +161,7 @@ const CreateCampaign = (_props: DIProps) => {
                 description="Facebook Dynamic Ads automatically target the audience based on their interest, intent, and actions."
                 onClick={() => history(`/panel/${match.uId}/dashboard`)}
             />
-            {data?.products_count == 0 ? (
+            {initData?.products_count == 0 ? (
                 <div className="mt-10 mb-20">
                     <Alert
                         destroy={false}
@@ -174,7 +186,9 @@ const CreateCampaign = (_props: DIProps) => {
                 </div>
             ) : null}
             <div
-                className={data?.products_count == 0 ? 'disable-campaign' : ''}>
+                className={
+                    initData?.products_count == 0 ? 'disable-campaign' : ''
+                }>
                 <FlexLayout
                     childWidth="fullWidth"
                     spacing="extraLoose"
@@ -186,37 +200,41 @@ const CreateCampaign = (_props: DIProps) => {
                         tabWidth="66">
                         <Card>
                             <CampaignForm
-                                formData={campaignData}
-                                setFormData={setCampaignData}
-                                fillData={fillData}
-                                setFillData={setFillData}
+                                editFormData={campaignData}
+                                updateChanges={updateChanges}
                             />
                             <hr />
                             <CampaignProducts
-                                product_count={data?.products_count}
+                                product_count={initData?.products_count}
                             />
                             <hr />
                             <TargetLocation />
                             <hr />
                             <Audience
-                                audienceData={campaignData}
+                                editAudienceData={campaignData}
                                 setAudienceData={setCampaignData}
-                                fillData={fillData}
-                                setFillData={setFillData}
+                                retargeting={initData}
+                                updateChanges={updateChanges}
                             />
                             <hr />
                             <Placement
-                                placement={campaignData}
-                                setPlacement={setCampaignData}
-                                fillData={fillData}
-                                setFillData={setFillData}
+                                editPlacementData={campaignData.placements}
+                                updateChanges={updateChanges}
                             />
                             <hr />
                             <FlexLayout spacing="loose" halign="end">
                                 <Button
                                     halign="Center"
                                     thickness="large"
-                                    type="Outlined">
+                                    type="Outlined"
+                                    onClick={() => {
+                                        if (!disableButton())
+                                            setQuitLoading(true);
+                                        else
+                                            history(
+                                                `/panel/${match.uId}/dashboard`
+                                            );
+                                    }}>
                                     Cancel
                                 </Button>
 
@@ -239,10 +257,30 @@ const CreateCampaign = (_props: DIProps) => {
                         desktopWidth="33"
                         mobileWidth="100"
                         tabWidth="33">
-                        <Preview productPreview={data?.products_preview} />
+                        <Preview productPreview={initData?.products_preview} />
                     </FlexChild>
                 </FlexLayout>
             </div>
+
+            <Modal
+                open={quitLoading}
+                close={() => setQuitLoading(!quitLoading)}
+                heading="Quit Campaign Setup"
+                modalSize="small"
+                primaryAction={{
+                    type: 'Danger',
+                    content: 'Quit Setup',
+                    loading: false,
+                    onClick: function noRefCheck() {},
+                }}
+                secondaryAction={{
+                    content: 'Continue',
+                    loading: false,
+                    onClick: () => setQuitLoading(!quitLoading),
+                }}>
+                Are you sure you want to quit setting up the campaign? Your
+                progress won’t be saved if you quit now.
+            </Modal>
         </>
     );
 };

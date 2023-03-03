@@ -7,37 +7,59 @@ import {
 } from '@cedcommerce/ounce-ui';
 import React, { useEffect, useState } from 'react';
 import { CheckCircle } from 'react-feather';
+import { useParams } from 'react-router-dom';
 import { placementI } from '../create';
 
 const Placement = (_props: placementI) => {
-    const { placement, fillData, setFillData } = _props;
-    const [placementData, setPlacementData] = useState<String[]>([]);
+    const { editPlacementData, updateChanges } = _props;
+    const match = useParams();
+
+    const [placement, setPlacement] = useState(['facebook']);
 
     useEffect(() => {
-        setPlacementData([...placement.placements]);
+        updateChanges(placementFill(), changeFunc(), 'platforms', placement);
     }, [placement]);
 
-    const placementFunc = (value: string) => {
-        if (placementData.includes(value)) {
-            let update = placementData.filter((item) => {
-                if (item === value) {
-                    return false;
-                }
-                return item;
-            });
-            setPlacementData([...update]);
-            if (update.length == 0)
-                setFillData({ ...fillData, placement: false });
+    useEffect(() => {
+        setPlacement([...editPlacementData]);
+    }, [editPlacementData]);
+
+    const placementFunc = (val: string) => {
+        if (placement.includes(val)) {
+            const temp: string[] = [...placement];
+            temp.splice(placement.indexOf(val), 1);
+            setPlacement(temp);
         } else {
-            setFillData({ ...fillData, placement: true });
-            setPlacementData([...placementData, value]);
+            setPlacement([...placement, val]);
         }
+    };
+
+    const placementFill = () => {
+        let valid = false;
+        if (placement.length) valid = true;
+        return valid;
+    };
+
+    const changeFunc = () => {
+        let change = false;
+        let previous = [...editPlacementData];
+
+        if (match.CId !== undefined) {
+            let current: string[] = [...placement];
+
+            let difference = current.filter((item) => !previous.includes(item));
+            if (previous.length !== current.length && difference.length === 0)
+                change = true;
+            else if (difference.length) change = true;
+            else change = false;
+        }
+        return change;
     };
 
     return (
         <FlexLayout spacing="loose" valign="start" wrap="noWrap">
             <CheckCircle
-                color={placementData.length ? '#027A48' : '#70747E'}
+                color={placementFill() ? '#027A48' : '#70747E'}
                 size="20"
                 style={{ display: 'block' }}
             />
@@ -60,7 +82,7 @@ const Placement = (_props: placementI) => {
                         placement gets distributed between the two platforms
                         based on the Ad strength.
                     </TextStyles>
-                    {placementData.length === 0 ? (
+                    {placement.length === 0 ? (
                         <Alert
                             destroy={false}
                             onClose={function noRefCheck() {}}
@@ -75,13 +97,13 @@ const Placement = (_props: placementI) => {
                         wrap="noWrap">
                         <CheckBox
                             key={'facebookCheck'}
-                            checked={placementData.includes('facebook')}
+                            checked={placement.includes('facebook')}
                             labelVal="Facebook"
                             onClick={() => placementFunc('facebook')}
                         />
                         <CheckBox
                             key={'instagramCheck'}
-                            checked={placementData.includes('instagram')}
+                            checked={placement.includes('instagram')}
                             labelVal="Instagram"
                             onClick={() => placementFunc('instagram')}
                         />

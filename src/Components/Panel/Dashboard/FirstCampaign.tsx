@@ -10,14 +10,18 @@ import './dashboardStyle.css';
 import React from 'react';
 import { Plus } from 'react-feather';
 import { NoCamp } from '../../../Components/EmptyState/EmptyIllustration';
+import { DI, DIProps } from '../../../Core';
+import { useParams } from 'react-router-dom';
 
-const FirstCampaign = () => {
+const FirstCampaign = (_props: DIProps) => {
+    const { history } = _props;
+    const match = useParams();
     return (
         <>
-            <PageHeader
+            {/* <PageHeader
                 title="Welcome to Social Ads for Buy with Prime!"
                 description="Create and manage all your Buy with Prime Facebook and Instagram campaigns here."
-            />
+            /> */}
 
             <Card>
                 <div className="firstcampaign-main">
@@ -63,7 +67,15 @@ const FirstCampaign = () => {
                             </>
                         </FlexChild>
                         <FlexChild>
-                            <Button icon={<Plus />}>Create Campaign</Button>
+                            <Button
+                                icon={<Plus />}
+                                onClick={() =>
+                                    history(
+                                        `/panel/${match.uId}/dashboard/create`
+                                    )
+                                }>
+                                Create Campaign
+                            </Button>
                         </FlexChild>
                     </FlexLayout>
                 </div>
@@ -72,4 +84,4 @@ const FirstCampaign = () => {
     );
 };
 
-export default FirstCampaign;
+export default DI(FirstCampaign);
