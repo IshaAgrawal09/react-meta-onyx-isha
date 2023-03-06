@@ -50,4 +50,5 @@ export interface placementI {
 
 export interface previewI extends DIProps {
     productPreview: { main_image: string; price: number; title: string }[];
+    text?: string;
 }

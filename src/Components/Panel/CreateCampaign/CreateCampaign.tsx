@@ -152,6 +152,7 @@ const CreateCampaign = (_props: DIProps) => {
         temp[code] = { flag: flag, changes: change, code: code, val: value };
         setDatas({ ...datas, ...temp });
     };
+    console.log(datas);
 
     return (
         <>
@@ -257,7 +258,10 @@ const CreateCampaign = (_props: DIProps) => {
                         desktopWidth="33"
                         mobileWidth="100"
                         tabWidth="33">
-                        <Preview productPreview={initData?.products_preview} />
+                        <Preview
+                            productPreview={initData?.products_preview}
+                            text={datas?.campaign_details?.val?.adText}
+                        />
                     </FlexChild>
                 </FlexLayout>
             </div>
