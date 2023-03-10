@@ -10,6 +10,7 @@ export interface campaignDataI {
     end_date?: any;
     adText: string;
     daily_budget: string;
+    type?: string;
 }
 
 export interface campaignFormI {
@@ -29,7 +30,7 @@ export interface campaignProductsI {
 export interface audienceI {
     editAudienceData: campaignDataI;
     setAudienceData: (val: any) => void;
-    retargeting: any;
+    initData: any;
     updateChanges: (
         flag: boolean,
         change: boolean,

@@ -8,7 +8,7 @@ export const StaticGridData = [
         campaign_placement: ['facebook', 'instagram'],
         user_id: '63dcf8c6fe5982a3390422f2',
         shop_id: '939',
-        start_date: '02/04/2023',
+        start_date: '05/03/2023',
         end_date: '02/01/2024',
         spend: 55976.8,
         impressions: 40556,
