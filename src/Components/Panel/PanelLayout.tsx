@@ -20,7 +20,7 @@ import Dashboard from './Dashboard';
 import Faq from './Faq';
 import Help from './Help';
 import { Menu, SubMenu } from './Menu';
-import Product from './Product';
+import Product from './ProductListing';
 import Settings from './Settings';
 
 const PanelLayout = (props: DIProps): JSX.Element => {
