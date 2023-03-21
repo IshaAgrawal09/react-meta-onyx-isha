@@ -58,22 +58,20 @@ export const StaticGridData = [
     //     campaign_name: 'Winter sale signing off',
     //     campaign_id: '23853208764360698',
     //     daily_budget: 29990,
-    //     status: [
-    //         'Error',
-    //         [
-    //             {
-    //                 title: 'Error in url ',
-    //                 description: 'url : is not available.',
-    //             },
-    //             {
-    //                 title: 'Error in main_image ',
-    //                 description: 'main_image : is not available.',
-    //             },
-    //             {
-    //                 title: 'Error in description',
-    //                 description: 'Error in description',
-    //             },
-    //         ],
+    //     status: 'Error',
+    //     error: [
+    //         {
+    //             title: 'Error in url ',
+    //             description: 'url : is not available.',
+    //         },
+    //         {
+    //             title: 'Error in main_image ',
+    //             description: 'main_image : is not available.',
+    //         },
+    //         {
+    //             title: 'Error in description',
+    //             description: 'Error in description',
+    //         },
     //     ],
     //     campaign_placement: ['facebook'],
     //     user_id: '63dcf8c6fe5982a3390422f2',

@@ -7,7 +7,7 @@ import {
     TextStyles,
     Topbar,
 } from '@cedcommerce/ounce-ui';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Bell } from 'react-feather';
 import { Route, Routes } from 'react-router-dom';
 import { StoreDispatcher } from '../../../src';
@@ -22,9 +22,14 @@ import Help from './Help';
 import { Menu, SubMenu } from './Menu';
 import Product from './ProductListing';
 import Settings from './Settings';
+interface panelLayoutI extends DIProps {
+    notificationMsg: string;
+}
 
-const PanelLayout = (props: DIProps): JSX.Element => {
-    const [redDotNotification, setRedDotNotification] = useState(true);
+const PanelLayout = (_props: panelLayoutI): JSX.Element => {
+    const { notificationMsg } = _props;
+    const [notificationArr, setNotificationArr] = useState([]);
+    const [redDotNotification, setRedDotNotification] = useState(false);
     const [openNotification, setOpenNotification] = useState(false);
     const [openModalLogout, setOpenModalLogout] = useState(false);
 
@@ -32,7 +37,7 @@ const PanelLayout = (props: DIProps): JSX.Element => {
 
     const onChangeHandle = (e: any) => {
         if (e.path === 'logout') setOpenModalLogout(true);
-        else props.history(e.path);
+        else _props.history(e.path);
     };
     const getCurrentPath = (path: string) => {
         const newpAth = '/' + path.split('/')[1] + '/' + path.split('/')[3];
@@ -45,12 +50,16 @@ const PanelLayout = (props: DIProps): JSX.Element => {
             state: {},
         });
 
-        props.history('/auth');
-        props.di.globalState.removeLocalStorage('showInstaBanner');
-        props.di.globalState.removeLocalStorage('showPaymentBanner');
-        props.di.globalState.removeLocalStorage('auth_token');
+        _props.history('/auth');
+        _props.di.globalState.removeLocalStorage('showInstaBanner');
+        _props.di.globalState.removeLocalStorage('showPaymentBanner');
+        _props.di.globalState.removeLocalStorage('auth_token');
         setOpenModalLogout(false);
     };
+
+    useEffect(() => {
+        if (notificationMsg) setRedDotNotification(true);
+    }, [notificationMsg]);
 
     function panelRoutes() {
         return (
@@ -86,13 +95,15 @@ const PanelLayout = (props: DIProps): JSX.Element => {
                                     }}></Button>
                             </>
                         }>
-                        <TextStyles>Notifications</TextStyles>
+                        <div className="mt-20">
+                            <TextStyles>{notificationMsg}</TextStyles>
+                        </div>
                     </Popover>
                 }></Topbar>
             <div className="sidebar_width_logout">
                 <NewSidebar
                     subMenu={SubMenu}
-                    path={getCurrentPath(props.location.pathname)}
+                    path={getCurrentPath(_props.location.pathname)}
                     menu={Menu}
                     onChange={(e: any) => onChangeHandle(e)}
                     logo={<Logo />}
@@ -128,3 +139,8 @@ const PanelLayout = (props: DIProps): JSX.Element => {
 };
 
 export default DI(PanelLayout);
+// webSocketInit({ ...props }, callback);
+// const webhookCall = sessionStorage.getItem('webhook_call');
+// sessionStorage.removeItem('webhook_call');
+// webhookCall === 'true' && props.di.POST('onyx/webhook/create', {});
+// setHasBeenCalled(true);

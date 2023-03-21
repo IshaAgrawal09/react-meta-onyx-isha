@@ -15,14 +15,7 @@ import {
     ClipBoard,
     WhiteFacebookIcon,
 } from '../Settings/svgs/Svgs';
-import {
-    APP_SOURCE_NAME,
-    APP_TARGET_NAME,
-    currency,
-    externalRedirectLink,
-    timezone,
-    urlFetchCalls,
-} from '../../../Constant';
+import { APP_SOURCE_NAME, externalRedirectLink } from '../../../Constant';
 import Footer from '../../Footer/Footer';
 import { DI, DIProps } from '../../../Core';
 import { syncConnectorInfo, syncNecessaryInfo } from '../../../Actions';

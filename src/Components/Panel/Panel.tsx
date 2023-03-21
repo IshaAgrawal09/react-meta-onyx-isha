@@ -17,7 +17,12 @@ export interface PanelProps extends DIProps {
 const Panel = (_props: PanelProps): JSX.Element => {
     const dispatcher = useContext(StoreDispatcher);
     const [showDashboard, setShowDashboard] = useState(false);
+    const [message, setMessage] = useState('');
     const [call, setCall] = useState(false);
+
+    const clientId = process.env.REACT_WEBSOCEKT_CLIENTID;
+    const token = sessionStorage.getItem(_props.match.uId + '_auth_token');
+    const userId = _props.match.uId;
 
     useEffect(() => {
         dispatcher({
@@ -33,11 +38,7 @@ const Panel = (_props: PanelProps): JSX.Element => {
         const shop = _props.di.globalState.get(`shop`);
         await _props.syncConnectorInfo(_props, shop);
         await _props.syncNecessaryInfo();
-        // webSocketInit({ ...props }, callback);
-        // const webhookCall = sessionStorage.getItem('webhook_call');
-        // sessionStorage.removeItem('webhook_call');
-        // webhookCall === 'true' && props.di.POST('onyx/webhook/create', {});
-        // setHasBeenCalled(true);
+        webSocketFunc();
         setCall(true);
     }
 
@@ -53,9 +54,32 @@ const Panel = (_props: PanelProps): JSX.Element => {
     if (onBoardingFlag) {
         bodyLayout = <Onboarding />;
     } else {
-        bodyLayout = <PanelLayout />;
+        bodyLayout = <PanelLayout notificationMsg={message} />;
     }
 
+    const webSocketFunc = () => {
+        const socket = new WebSocket(
+            'wss://a5zls8ce93.execute-api.us-east-2.amazonaws.com/beta'
+        );
+        socket.onopen = function (e) {
+            console.log('connection established!', userId, clientId, token);
+
+            socket.send(
+                '{ "action": "identity","client_id":' +
+                    clientId +
+                    ',"customer_id":"' +
+                    userId +
+                    '","token":"' +
+                    token +
+                    '"}'
+            );
+        };
+        socket.onmessage = function (message) {
+            setMessage(message.data);
+            console.log(message);
+        };
+    };
+    console.log('Message: ', message);
     return <>{call ? bodyLayout : <Loader type="Loader1" {..._props} />}</>;
 };
 

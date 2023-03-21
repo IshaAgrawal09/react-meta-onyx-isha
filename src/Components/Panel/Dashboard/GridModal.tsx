@@ -17,7 +17,7 @@ export const ErrorModal = (_props: errorModalI) => {
         loadingErrorModal,
         solutions,
     } = _props;
-
+    console.log(errorArray);
     const [openSolution, setOpenSolution] = React.useState<boolean[]>([]);
 
     React.useEffect(() => {
