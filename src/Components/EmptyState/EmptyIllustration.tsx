@@ -1061,20 +1061,20 @@ export const BrokenLInk = () => (
         <path
             d="M88.9113 36.7601L81.9551 26.2891"
             stroke="#8E76D7"
-            stroke-width="8.03162"
-            stroke-linecap="round"
+            strokeWidth="8.03162"
+            strokeLinecap="round"
         />
         <path
             d="M107.462 31.5242L108.279 5"
             stroke="#8E76D7"
-            stroke-width="8.03162"
-            stroke-linecap="round"
+            strokeWidth="8.03162"
+            strokeLinecap="round"
         />
         <path
             d="M124.095 37.0071L135.199 12.9053"
             stroke="#8E76D7"
-            stroke-width="8.03162"
-            stroke-linecap="round"
+            strokeWidth="8.03162"
+            strokeLinecap="round"
         />
     </svg>
 );
