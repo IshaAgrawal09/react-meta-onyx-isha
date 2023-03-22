@@ -6,9 +6,9 @@
  * @returns Returns the strenght of the password.
  */
 export const PasswordStrenght: any = (user_password: string) => {
-    let strenght: number = 0;
+    let strenght = 0;
     const Special_chars = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-    const ownWeight: number = 20;
+    const ownWeight = 20;
     if (/.*[a-z].*/.test(user_password)) {
         strenght = strenght + ownWeight;
     }

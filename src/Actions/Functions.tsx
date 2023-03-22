@@ -1,7 +1,7 @@
 import { APP_SOURCE_NAME, APP_TARGET_NAME } from '../Constant';
 
 export function extractCurrentAccount(e: any, shop_url?: string | null) {
-    let user_account: any = {
+    const user_account: any = {
         source: {
             [APP_SOURCE_NAME]: [],
         },
@@ -10,7 +10,7 @@ export function extractCurrentAccount(e: any, shop_url?: string | null) {
         },
     };
 
-    let source = extractCurrentSourceShop(e, shop_url);
+    const source = extractCurrentSourceShop(e, shop_url);
     if (!process.env.REACT_APP_PROD) {
         user_account['allsource'] = extractSourceShop(e);
     }
@@ -63,7 +63,7 @@ export function extractCurrentSelected(
 }
 
 function exportCurrentTargetShop(e: any, shop_id?: any) {
-    let user_account_new: any = {
+    const user_account_new: any = {
         target: {
             [APP_TARGET_NAME]: [],
         },
@@ -97,7 +97,7 @@ function exportCurrentTargetShop(e: any, shop_id?: any) {
     return user_account_new['target'];
 }
 export function extractSourceShop(e: any) {
-    let accountShop: any = {};
+    const accountShop: any = {};
     Object.values(e.data)
         .filter(
             (code: any) =>

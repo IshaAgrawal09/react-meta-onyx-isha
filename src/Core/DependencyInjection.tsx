@@ -157,9 +157,9 @@ const DependencyInjection = function (
     errorType: errorType = ''
 ): React.FC<ObjectI> {
     const ComponentWrapper = function (props: ObjectI): JSX.Element {
-        let navigate = useNavigate();
-        let match = useParams();
-        let location = useLocation();
+        const navigate = useNavigate();
+        const match = useParams();
+        const location = useLocation();
         const dispacher = useContext(StoreDispatcher);
         let params = {
             target_marketplace:
