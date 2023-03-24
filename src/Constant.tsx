@@ -36,6 +36,7 @@ export const regexValidation = {
  */
 export const urlFetchCalls = {
     get: {
+        allNotification: 'connector/get/allNotifications',
         sendUserMail: 'onyx/user/sendUserMail',
         otpMail: 'user/otpMail',
         installtionForm: 'connector/get/installationForm',
