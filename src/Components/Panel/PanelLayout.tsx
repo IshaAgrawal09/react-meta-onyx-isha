@@ -80,7 +80,8 @@ const PanelLayout = (_props: panelLayoutI): JSX.Element => {
         if (Math.floor(year) > 0) return finalDate;
         else if (Math.floor(month) > 0) return finalDate;
         else if (Math.floor(day) > 0) return finalDate;
-        else if (Math.floor(hours) > 0) return `${Math.floor(hours)} hours ago`;
+        else if (Math.floor(hours) > 0)
+            return `${Math.floor(hours)} hours ago, Today`;
         else if (Math.floor(minutes) > 0)
             return `${Math.floor(minutes)} mins ago`;
         else if (Math.floor(seconds) > 0)
